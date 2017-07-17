@@ -37,9 +37,7 @@ public class AuthorController {
     
     @Autowired
     SysStaffService sysStaffService;
-    
-
-    
+       
     @Autowired
     MenuAuthorService menuAuthorService;
     @Autowired
