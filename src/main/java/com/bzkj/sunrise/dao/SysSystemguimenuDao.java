@@ -25,7 +25,7 @@ public interface SysSystemguimenuDao extends BaseMapper<SysSystemguimenu> {
 	@Select("SELECT m.* FROM sys_stafffuncright sfr,sys_role r,sys_rolefuncright rf,sys_funcright fr,"
 			+ "sys_systemguimenu m "+
 			"WHERE sfr.staff_id=#{staffId} AND sfr.`RIGHT_ATTR`='1' "+
-			"and sfr.right_code=r.role_code and r.role_attr='0' "+
+			"and sfr.right_code=r.role_code and r.role_attr='0' and r.VALIDFLAG='0'"+
 			"and r.role_code=rf.role_code and rf.right_code=fr.right_code "+
 			"AND m.`RIGHT_CODE`=fr.`RIGHT_CODE` ")
 	public List<SysSystemguimenu> findMenuByStaffIdWithRole(String staffId);
@@ -51,5 +51,5 @@ public interface SysSystemguimenuDao extends BaseMapper<SysSystemguimenu> {
 	//菜单定制隐藏显示
 	@Select("select m.* from sys_hidemenuitem h,sys_systemguimenu m where h.staff_id=#{staffId}"+
 			" and m.menu_id=h.menu_id")
-	public List<SysStafftempfuncright> hiddenMenu(String staffId);
+	public List<SysSystemguimenu> hiddenMenu(String staffId);
 }

@@ -22,7 +22,7 @@ import com.bzkj.sunrise.dao.SysCurrentTokenDao;
 import com.bzkj.sunrise.dao.SysStaffDao;
 import com.bzkj.sunrise.entity.SysStaff;
 import com.bzkj.sunrise.entity.SysSystemguimenu;
-import com.bzkj.sunrise.service.MenuService;
+import com.bzkj.sunrise.service.MenuAuthorService;
 import com.bzkj.sunrise.service.SysCurrentTokenService;
 import com.bzkj.sunrise.service.SysStaffService;
 
@@ -41,7 +41,7 @@ public class DemoApplicationTests {
 	SysStaffService sysStaffService;
 	
 	@Autowired
-	MenuService menuService;
+	MenuAuthorService menuService;
 	
 	private int[] getGroup(String match){
 		int[] arr=new int[4];

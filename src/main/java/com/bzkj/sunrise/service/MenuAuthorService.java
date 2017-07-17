@@ -14,7 +14,7 @@ import com.bzkj.sunrise.entity.SysStafftempfuncright;
 import com.bzkj.sunrise.entity.SysSystemguimenu;
 
 @Service
-public class MenuService {
+public class MenuAuthorService {
 
 	@Autowired
 	SysSystemguimenuDao sysSystemguimenuDao;

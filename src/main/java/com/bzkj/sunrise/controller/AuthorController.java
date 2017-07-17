@@ -15,10 +15,12 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.bzkj.sunrise.dao.SysStaffDao;
 import com.bzkj.sunrise.entity.SysCurrentToken;
+import com.bzkj.sunrise.entity.SysDataright;
 import com.bzkj.sunrise.entity.SysStaff;
 import com.bzkj.sunrise.entity.SysSystemguimenu;
+import com.bzkj.sunrise.service.DataAthorService;
 import com.bzkj.sunrise.service.LoginLimitService;
-import com.bzkj.sunrise.service.MenuService;
+import com.bzkj.sunrise.service.MenuAuthorService;
 import com.bzkj.sunrise.service.SysStaffService;
 import com.bzkj.sunrise.util.HttpUtil;
 
@@ -39,7 +41,9 @@ public class AuthorController {
 
     
     @Autowired
-    MenuService menuService;
+    MenuAuthorService menuAuthorService;
+    @Autowired
+    DataAthorService dataAthorService;
     @Autowired
     LoginLimitService loginLimitService;
 	
@@ -47,8 +51,8 @@ public class AuthorController {
 	//根据token获取菜单
 	@RequestMapping(value = "/menu/get", method = RequestMethod.GET)
 	@ResponseBody
-	public Map<String, Object> update(String token,HttpServletRequest request) throws Exception {
-		String ip=HttpUtil.getIpAddr(request);
+	public Map<String, Object> getMenu(String token,HttpServletRequest request) throws Exception {
+		String ip=HttpUtil.getIpAddress(request);
 		Map<String, Object> map=new HashMap<String, Object>();
 		SysCurrentToken cToken=sysStaffService.verifyToken(token,ip);
 		if(cToken==null){
@@ -58,12 +62,33 @@ public class AuthorController {
 		}
 		
 		String staffId=cToken.getStaffId();
-		List<SysSystemguimenu> menus=menuService.menuWithStaff(staffId);
+		List<SysSystemguimenu> menus=menuAuthorService.menuWithStaff(staffId);
 		map.put("success", "true");
 		map.put("menu", menus);
 		return map;
 		
 	}	
+	
+	//根据token获取数据权限
+	@RequestMapping(value = "/data/get", method = RequestMethod.GET)
+	@ResponseBody
+	public Map<String, Object> getData(String token,HttpServletRequest request) throws Exception {
+		String ip=HttpUtil.getIpAddress(request);
+		Map<String, Object> map=new HashMap<String, Object>();
+		SysCurrentToken cToken=sysStaffService.verifyToken(token,ip);
+		if(cToken==null){
+			map.put("success", "false");
+			map.put("msg", "当前token无效，请重新登录");
+			return map;
+		}
+		
+		String staffId=cToken.getStaffId();
+		List<SysDataright> datas=dataAthorService.menuWithStaff(staffId);
+		map.put("success", "true");
+		map.put("data", datas);
+		return map;
+		
+	}
 	
 	@RequestMapping(value = "/login", method = RequestMethod.GET)
 	@ResponseBody
@@ -76,7 +101,7 @@ public class AuthorController {
 			map.put("msg", "验证用户信息失败");
 			return map;
 		}
-		String ip=HttpUtil.getIpAddr(request);
+		String ip=HttpUtil.getIpAddress(request);
 		//验证登录时间
 		if(!loginLimitService.verifyTimeLimit(staff.getStaffId())){
 			map.put("success", "false");
