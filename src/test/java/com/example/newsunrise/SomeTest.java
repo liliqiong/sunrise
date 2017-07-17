@@ -9,7 +9,8 @@ public class SomeTest {
 
 	@Test
 	public void test(){
-		boolean a=ipIn("192.188.1.1","192.188.4.3","192.188.3.2");
+		//gittest
+		boolean a=ipIn("192.168.1.0","192.168.1.0","192.168.1.0");
 		System.out.println(a);
 	}
 	
