@@ -4,6 +4,7 @@ import java.io.Serializable;
 import java.util.Date;
 
 import com.baomidou.mybatisplus.activerecord.Model;
+import com.baomidou.mybatisplus.annotations.TableId;
 
 
 /**
@@ -20,6 +21,7 @@ public class SysStaff extends Model<SysStaff> {
 	private static final long serialVersionUID = 1L;
 	// Fields
 	//员工编码：在任何时间内唯一，离职的员工打上标记，不直接删除
+	@TableId
 	private String staffId;
 	private String departId;
 	private String staffName;

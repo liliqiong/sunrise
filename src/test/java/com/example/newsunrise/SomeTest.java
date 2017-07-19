@@ -5,6 +5,8 @@ import java.util.regex.Pattern;
 
 import org.junit.Test;
 
+import com.bzkj.sunrise.util.Underline2Camel;
+
 public class SomeTest {
 
 	@Test
@@ -12,6 +14,22 @@ public class SomeTest {
 		//gittest
 		boolean a=ipIn("192.168.1.0","192.168.1.0","192.168.1.0");
 		System.out.println(a);
+	}
+	
+	@Test
+	public void test2(){
+		//gittest
+		String s="sys_staff";
+		s=Underline2Camel.underline2Camel(s, true);
+		System.out.println(s);
+	}
+	
+	@Test
+	public void test3(){
+		String sql="select * from sysddd where 1=1 and a>b";
+		Matcher m=Pattern.compile("(from.*)").matcher(sql);
+		m.find();
+		System.out.println(m.group());
 	}
 	
 	private boolean ipIn(String start,String end,String ip){

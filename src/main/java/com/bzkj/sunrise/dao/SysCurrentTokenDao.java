@@ -1,7 +1,6 @@
 package com.bzkj.sunrise.dao;
 
 import org.apache.ibatis.annotations.Delete;
-import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Select;
 import org.apache.ibatis.annotations.Update;
@@ -9,7 +8,7 @@ import org.apache.ibatis.annotations.Update;
 import com.baomidou.mybatisplus.mapper.BaseMapper;
 import com.bzkj.sunrise.entity.SysCurrentToken;
 
-@Mapper
+
 public interface SysCurrentTokenDao extends BaseMapper<SysCurrentToken>{
 	
 	@Select("select * from sys_current_token where staff_id=#{staffId} and expiration_time>now()")

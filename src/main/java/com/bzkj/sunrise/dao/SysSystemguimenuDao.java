@@ -2,14 +2,13 @@ package com.bzkj.sunrise.dao;
 
 import java.util.List;
 
-import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Select;
 
 import com.baomidou.mybatisplus.mapper.BaseMapper;
 import com.bzkj.sunrise.entity.SysStafftempfuncright;
 import com.bzkj.sunrise.entity.SysSystemguimenu;
 
-@Mapper
+
 public interface SysSystemguimenuDao extends BaseMapper<SysSystemguimenu> {
 	
 	//根据staff_id获取对应的菜单

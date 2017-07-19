@@ -5,7 +5,6 @@ import java.util.Date;
 
 import com.baomidou.mybatisplus.activerecord.Model;
 
-
 /**
  *数据权限编码表
  *

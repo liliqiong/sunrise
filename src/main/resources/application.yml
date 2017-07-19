@@ -36,6 +36,19 @@ spring:
     #属性类型是字符串，通过别名的方式配置扩展插件，常用的插件有：
     #监控统计用的filter:stat 日志用的filter:log4j 防御SQL注入的filter:wall
     filters: stat
+  
+  thymeleaf:
+    cache: false
+    # 这个是配置模板路径的，默认就是templates，可不用配置
+    prefix: classpath:templates/
+    # 这个可以不配置，检查模板位置
+    check-template-location: true
+    # 下面3个不做解释了，可以不配置
+    suffix: .html
+    encoding: UTF-8
+    content-type: text/html
+    # 模板的模式
+    mode: HTML5
 #  jpa:
 #    show-sql: true
 #  data:
@@ -59,5 +72,7 @@ selfProperties:
   token-expiration-time: 1800000
 
 
-
+management:
+  security:
+    enabled: false
 
