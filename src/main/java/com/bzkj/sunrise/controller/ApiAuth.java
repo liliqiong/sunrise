@@ -37,6 +37,12 @@ public class ApiAuth {
 		// do service
 		return check;
 	}
+	
+	@RequestMapping(value = "/index")
+	public String index(){
+		return "test";
+	}
+	
 
 	private String check(String reqTime, String info, String token, String sign)
 			throws Exception {

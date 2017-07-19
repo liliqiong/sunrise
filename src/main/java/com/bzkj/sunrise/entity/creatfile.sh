@@ -27,7 +27,11 @@ public interface "${str}"Dao extends BaseMapper<"${str}">{}"
 
 
 "
+if [ ! -e $dao ];then
   echo $cls > $dao
+fi
+if [ ! -e $xml ];then
   echo $xmlstr > $xml
+fi
   echo $cls
 done
