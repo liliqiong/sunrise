@@ -36,6 +36,10 @@ spring:
     #属性类型是字符串，通过别名的方式配置扩展插件，常用的插件有：
     #监控统计用的filter:stat 日志用的filter:log4j 防御SQL注入的filter:wall
     filters: stat
+<<<<<<< HEAD
+=======
+  
+>>>>>>> 98c60b773ea81f3d980aeaf427da6891b8914fcb
   thymeleaf:
     cache: false
     # 这个是配置模板路径的，默认就是templates，可不用配置
@@ -71,5 +75,7 @@ selfProperties:
   token-expiration-time: 1800000
 
 
-
+management:
+  security:
+    enabled: false
 

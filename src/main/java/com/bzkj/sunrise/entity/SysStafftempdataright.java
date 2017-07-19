@@ -19,6 +19,7 @@ public class SysStafftempdataright extends Model<SysStafftempdataright>{
 	 */
 	private static final long serialVersionUID = 1L;
 	private String staffId;
+
 	private String dataCode;
 	//数据类型：0－资源权限，1－数据特权(行列数等)，2－产品权限，3－资费权限，4－服务权限
 	private String dataType;

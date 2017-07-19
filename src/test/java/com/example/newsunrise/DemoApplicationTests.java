@@ -1,9 +1,7 @@
 package com.example.newsunrise;
 
-import java.util.Date;
-import java.util.HashMap;
+
 import java.util.List;
-import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -18,10 +16,13 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import com.bzkj.sunrise.SunRiseApplication;
+import com.bzkj.sunrise.dao.ConfEntityDao;
 import com.bzkj.sunrise.dao.SysCurrentTokenDao;
 import com.bzkj.sunrise.dao.SysStaffDao;
+import com.bzkj.sunrise.entity.ConfEntity;
 import com.bzkj.sunrise.entity.SysStaff;
 import com.bzkj.sunrise.entity.SysSystemguimenu;
+import com.bzkj.sunrise.service.ConfEntityService;
 import com.bzkj.sunrise.service.MenuAuthorService;
 import com.bzkj.sunrise.service.SysCurrentTokenService;
 import com.bzkj.sunrise.service.SysStaffService;
@@ -43,6 +44,10 @@ public class DemoApplicationTests {
 	@Autowired
 	MenuAuthorService menuService;
 	
+	@Autowired
+	ConfEntityDao confEntityDao;
+	@Autowired
+	ConfEntityService confEntityService;
 	private int[] getGroup(String match){
 		int[] arr=new int[4];
 		String exp="(\\d{1,3})\\.(\\d{1,3})\\.(\\d{1,3})\\.(\\d{1,3})";
@@ -82,6 +87,12 @@ public class DemoApplicationTests {
 		for (SysSystemguimenu sysSystemguimenu : list) {
 			System.out.println(sysSystemguimenu);
 		}
+	}
+	
+	@Test
+	public void confEntityDao(){
+		ConfEntity e=confEntityService.queryEntity("sysRole");
+		
 	}
 
 }

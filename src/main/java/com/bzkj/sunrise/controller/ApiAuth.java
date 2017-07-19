@@ -38,11 +38,12 @@ public class ApiAuth {
 		return check;
 	}
 	
-	@RequestMapping(value = "/index")
-	public String index(){
+
+
+	@RequestMapping(value = "/test")
+	public String test(){
 		return "test";
 	}
-	
 
 	private String check(String reqTime, String info, String token, String sign)
 			throws Exception {
