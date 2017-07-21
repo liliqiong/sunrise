@@ -1,5 +1,6 @@
 package com.bzkj.sunrise.controller;
 
+import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -13,13 +14,16 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.util.ReflectionUtils;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.baomidou.mybatisplus.mapper.BaseMapper;
 import com.bzkj.sunrise.dao.ConfEntityDao;
 import com.bzkj.sunrise.entity.ConfEntity;
 import com.bzkj.sunrise.service.ConfEntityService;
 import com.bzkj.sunrise.util.AaAmap;
+import com.bzkj.sunrise.util.SpringUtil;
 import com.bzkj.sunrise.util.SqlUtil;
 import com.bzkj.sunrise.util.Underline2Camel;
 
@@ -99,6 +103,27 @@ public class ConfigController {
 		
 	}
 	
+	@RequestMapping(value="/create")
+	@ResponseBody
+	public Map<String, String> createEntity(HttpServletRequest request){
+		Map<String, String> map=new HashMap<String, String>();
+		Map<String, String[]> _param=request.getParameterMap();
+		Map<String, String> data=conparam(_param);
+		String entityName= data.get("entityName");
+		data.remove(entityName);
+		BaseMapper bm=(BaseMapper) SpringUtil.getBean(entityName+"Dao");
+		entityName=upFist(entityName);
+		Object entity=getEneity(entityName);
+		Class clzz=getClass(entityName);
+		
+		data.forEach((K,V)->{
+			Field f=ReflectionUtils.findField(clzz, K);
+			ReflectionUtils.setField(f, entity, V);
+		});
+		System.out.println(entity);
+		return map;
+	}
+	
 	private Map<String, String> conparam(Map<String, String[]> _param){
 		Map<String, String> param=new HashMap<String, String>();
 		_param.forEach((K,V)->{
@@ -118,5 +143,45 @@ public class ConfigController {
 		});
 
 		return param;
+	}
+	
+	private Object getObj(String entityName){
+		Class<?> clzz=null;
+		try {
+			clzz=Class.forName("com.bzkj.sunrise.entity."+entityName);
+		} catch (ClassNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		Object o=null;
+		try {
+			o=clzz.newInstance();
+		} catch (InstantiationException | IllegalAccessException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return o;
+	}
+	
+	private Class getClass(String entityName){
+		Class clzz=null;
+		try {
+			clzz=Class.forName("com.bzkj.sunrise.entity."+entityName);
+		} catch (ClassNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		return clzz;
+	}
+	
+	private String upFist(String str){
+		String[] arr=str.split("");
+		arr[0]=arr[0].toUpperCase();
+		String result="";
+		for (int i = 0; i < arr.length; i++) {
+			result+=arr[i];
+		}
+		return result;
 	}
 }

@@ -54,5 +54,11 @@ public class SomeTest {
 		}
 		return arr;
 	}
+	
+	@Test
+	public void test4() throws ClassNotFoundException{
+		Class<?> cl=Class.forName("com.bzkj.sunrise.entity.SysRole");
+		System.out.println(cl);
+	}
 
 }
