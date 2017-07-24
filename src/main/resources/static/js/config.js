@@ -17,7 +17,6 @@ Ext.tree.Panel.addMembers({
         }
     }
 });
-
 Ext.define('WdatePickerTime',{
 	extend:'Ext.form.TextField',
 	itemCls:'required-field',
@@ -28,7 +27,7 @@ Ext.define('WdatePickerTime',{
 		v=v.replace('日','');
 		return v;
 
-    },    
+    },
 	listeners : {
 		render : function(p) {
 			Ext.get(p.getInputId()).on('click', function() {
@@ -75,25 +74,25 @@ Ext.define('Syu.Combox',{
       					}
       				}
       			}
-      		});			
-		}		
-		
+      		});
+		}
+
 	}
     ,listeners:{
     	beforequery:function(e){
-    		var combo = e.combo;  
-              if(!e.forceAll){  
-                  var input = e.query;  
+    		var combo = e.combo;
+              if(!e.forceAll){
+                  var input = e.query;
                   // 检索的正则
                   var regExp = new RegExp('.*'+input+'.*','i');
                   // 执行检索
-                  combo.store.filterBy(function(record,id){  
-                      var text = record.get(combo.displayField);  
+                  combo.store.filterBy(function(record,id){
+                      var text = record.get(combo.displayField);
                       return regExp.test(text);
                   });
-                  combo.expand();  
+                  combo.expand();
                   return false;
-              }		    	
+              }
     	}
     }
 });
@@ -114,7 +113,7 @@ function createInput(field){
 			        },
 			        scope:this
 			    }
-			    
+
 			}),
 		    fieldLabel: field.fieldText,
 		    id:field.entityName+'_'+field.fieldName,
@@ -137,7 +136,7 @@ function createInput(field){
 		    //allowBlank:inputInfo.allowblank,
 		    //regex:inputInfo.validateexp?new RegExp(inputInfo.validateexp):'',
 		    //regexText:inputInfo.validatemsg
-		    
+
 		});
 	}
 	if(field.fieldType=='int'){
@@ -147,7 +146,7 @@ function createInput(field){
 		    name:inputInfo.name
 		    //allowBlank:inputInfo.allowblank,
 		    //regex:inputInfo.validateexp?new RegExp(inputInfo.validateexp):'',
-		    //regexText:inputInfo.validatemsg		
+		    //regexText:inputInfo.validatemsg
 		});
 	}
 	if(field.fieldType=='date'){
@@ -227,7 +226,7 @@ function createGrid(entity){
 	        handler: function() {
 	        	var form = this.up('form').getForm();
 	        	var data = form.getValues();
-	        	
+
 	        	data.entityName=entity.entityName;
 	        	console.log(data);
 	        	Ext.Ajax.request({
@@ -235,18 +234,18 @@ function createGrid(entity){
 	        		url:'./../conf/create',
 	        		params:data,
 	        		failure:function(r,data){
-	        			
+
 	        		},
 	        		success:function(r,data){
 	        			var result = Ext.JSON.decode(r.responseText);
 
 
 	        		}
-	        	});	
+	        	});
 	        }
 	    }]
 	});
-	
+
 	var store=Ext.create('Ext.data.Store',{
 		fields:fields,
 		proxy : {
@@ -258,7 +257,7 @@ function createGrid(entity){
 	            root: 'data',
 	            totalProperty:'total'
 	            }
-            } 	  
+            }
 		}
 	);
 	store.load();
@@ -285,8 +284,8 @@ function createGrid(entity){
 			    xtype: 'toolbar',
 			    dock: 'top',
 			    items: [
-			        { 
-			        	xtype: 'button', 
+			        {
+			        	xtype: 'button',
 			        	text: '增加',
 			        	handler:function(){
 		        			Ext.create('Ext.window.Window', {
@@ -295,28 +294,28 @@ function createGrid(entity){
 		        			    width: 800,
 		        			    layout: 'fit',
 		        			    items: [form] // A dummy empty data store
-		        			    
+
 		        			}).show()
-			        		
+
 			        	}
 			        }
 			        ,'-'
 			        ,{
-			        	xtype: 'button', 
-			        	text: '修改' 			        	
+			        	xtype: 'button',
+			        	text: '修改'
 			        }
 			        ,'-'
 			        ,{
-			        	xtype: 'button', 
-			        	text: '删除' 			        	
+			        	xtype: 'button',
+			        	text: '删除'
 			        }
 			    ]
-		    }		
-		]	
+		    }
+		]
 	});
-	
+
 	return grid;
-		
+
 }
 
 
@@ -338,7 +337,7 @@ var treeStore = Ext.create('Ext.data.TreeStore', {
     	text:'报表'
     }
 });
-treeStore.load(); 
+treeStore.load();
 
 var tree=Ext.create('Ext.tree.Panel', {
 	title: '报表目录',
@@ -350,11 +349,11 @@ var tree=Ext.create('Ext.tree.Panel', {
 	autoScroll: true,
 	collapsible: true,
 	containerScroll: true,
-	split: true, 
+	split: true,
 	listeners: {
-	    'select': function(node, record,item) {	
+	    'select': function(node, record,item) {
 
-	    }   
+	    }
 	}
 
 });
@@ -366,13 +365,13 @@ var mainPanle=Ext.create('Ext.tab.Panel',{
 Ext.onReady(function(){
 	Ext.getDoc().on("contextmenu", function(e){
 	    e.stopEvent();
-	});	
+	});
 	Ext.Ajax.request({
 		method:'post',
 		url:'./../conf/entity',
 		params:{entityName:'sysRole'},
 		failure:function(r,data){
-			
+
 		},
 		success:function(r,data){
 			var result = Ext.JSON.decode(r.responseText);
@@ -386,12 +385,9 @@ Ext.onReady(function(){
 			mainPanle.add(panel);
 			mainPanle.setActiveTab(panel);
 		}
-	});	
-	var view=new Ext.Viewport({ 
+	});
+	var view=new Ext.Viewport({
 	   	layout:'border',
-	    items: [tree,mainPanle]  
-	}); 
-
-	
-
+	    items: [tree,mainPanle]
+	});
 });

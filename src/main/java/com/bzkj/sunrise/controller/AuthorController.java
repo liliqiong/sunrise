@@ -8,6 +8,8 @@ import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.beans.factory.annotation.Autowired;
+
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -45,11 +47,11 @@ public class AuthorController {
     @Autowired
     LoginLimitService loginLimitService;
 	
-	
+    
 	//根据token获取菜单
-	@RequestMapping(value = "/menu/get", method = RequestMethod.GET)
+	@RequestMapping(value = "/menu/get/{token}", method = RequestMethod.GET)
 	@ResponseBody
-	public Map<String, Object> getMenu(String token,HttpServletRequest request) throws Exception {
+	public Map<String, Object> getMenu(@PathVariable String token,HttpServletRequest request) throws Exception {
 		String ip=HttpUtil.getIpAddress(request);
 		Map<String, Object> map=new HashMap<String, Object>();
 		SysCurrentToken cToken=sysStaffService.verifyToken(token,ip);
@@ -68,13 +70,13 @@ public class AuthorController {
 	}	
 	
 	//根据token获取数据权限
-	@RequestMapping(value = "/data/get", method = RequestMethod.GET)
+	@RequestMapping(value = "/data/get/{token}", method = RequestMethod.GET)
 	@ResponseBody
-	public Map<String, Object> getData(String token,HttpServletRequest request) throws Exception {
+	public Map<String, Object> getData(@PathVariable String token,HttpServletRequest request) throws Exception {
 		String ip=HttpUtil.getIpAddress(request);
 		Map<String, Object> map=new HashMap<String, Object>();
 		SysCurrentToken cToken=sysStaffService.verifyToken(token,ip);
-		if(cToken==null){
+		if(cToken==null){ 
 			map.put("success", "false");
 			map.put("msg", "当前token无效，请重新登录");
 			return map;
@@ -85,20 +87,22 @@ public class AuthorController {
 		map.put("success", "true");
 		map.put("data", datas);
 		return map;
-		
+	
 	}
 	
 	@RequestMapping(value = "/login", method = RequestMethod.GET)
 	@ResponseBody
 	public Map<String, String> getAuthor(String id,String passwd,HttpServletRequest request) throws Exception {
 		Map<String, String> map=new HashMap<String, String>();
-		//验证用户密码是否正确
+
 		SysStaff staff=sysStaffService.verifyStaff(id, passwd);
+
 		if(staff==null){
 			map.put("success", "false");
 			map.put("msg", "验证用户信息失败");
 			return map;
 		}
+		//跟新redis超时时间 
 		String ip=HttpUtil.getIpAddress(request);
 		//验证登录时间
 		if(!loginLimitService.verifyTimeLimit(staff.getStaffId())){
@@ -118,8 +122,8 @@ public class AuthorController {
 		if(cToken!=null){
 			//用户在当前IP登录
 			if(ip.equals(cToken.getRequestIp())){
-				map.put("success", "false");
-				map.put("msg", "当前已经登录");	
+				map.put("success", "true");
+				map.put("msg", cToken.getToken());	
 				return map;
 			}else{
 				map.put("success", "false");
@@ -128,6 +132,7 @@ public class AuthorController {
 			}
 		}
 		
+	
 		//新建一个token返回给用户
 		SysCurrentToken token=sysStaffService.createToken(staff.getStaffId(), ip);
 		map.put("success", "true");

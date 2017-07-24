@@ -2,9 +2,13 @@ package com.bzkj.sunrise.service;
 
 import java.util.Date;
 import java.util.UUID;
+import java.util.concurrent.TimeUnit;
+
+import javax.annotation.Resource;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.context.properties.ConfigurationProperties;
+import org.springframework.data.redis.core.ValueOperations;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -26,10 +30,15 @@ public class SysStaffService {
 	SysCurrentTokenDao sysCurrentTokenDao;
 	@Autowired
 	SysStaffdatetimeDao sysStaffdatetimeDao;
-	private Long tokenExpirationTime;	
-	public void setTokenExpirationTime(Long tokenExpirationTime) {
-		this.tokenExpirationTime = tokenExpirationTime;
-	}
+
+	@Autowired
+	ConfigPropertiesService configPropertiesService;
+    @Resource(name = "redisTemplate")
+    ValueOperations<String, SysStaff> staffOps;
+    @Resource(name = "redisTemplate")
+    ValueOperations<String, SysCurrentToken> tokenOps;
+	
+
 	
 	/**
 	 * 通过员工ID，email,电话号码之一和密码验证当前用户是否有效
@@ -78,7 +87,7 @@ public class SysStaffService {
 		SysCurrentToken sct=new SysCurrentToken();
 		sct.setStaffId(staffId);
 		sct.setToken(UUID.randomUUID().toString());
-		sct.setExpirationTime(new Date(System.currentTimeMillis()+tokenExpirationTime));
+		sct.setExpirationTime(new Date(System.currentTimeMillis()+configPropertiesService.getTokenExpirationTime()*60*1000));
 		sct.setRequestIp(requestIp);
 		sysCurrentTokenDao.insert(sct);
 		return sct;
@@ -92,14 +101,20 @@ public class SysStaffService {
 	 */
 	@Transactional
 	public SysCurrentToken verifyToken(String token,String ip){
-		SysCurrentToken sct= sysCurrentTokenDao.findByToken(token, ip);
+		//从redis获取
+		SysCurrentToken sct =tokenOps.get(token+"_"+ip);
+		if(sct!=null){
+			return sct;
+		}
+		sct= sysCurrentTokenDao.findByToken(token, ip);
 		if(sct==null){
 			return null;
 		}
-		sct.setExpirationTime(new Date(System.currentTimeMillis()+tokenExpirationTime));
+		sct.setExpirationTime(new Date(System.currentTimeMillis()+configPropertiesService.getTokenExpirationTime()*60*1000));
 		//跟新token有效时间
 		System.out.println(sct);
 		sysCurrentTokenDao.updateOne(sct);
+		tokenOps.set(token+"_"+ip, sct, configPropertiesService.getTokenExpirationTime(), TimeUnit.MINUTES);
 		return sct;
 	}
 	

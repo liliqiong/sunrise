@@ -5,24 +5,25 @@ import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import javax.annotation.Resource;
+
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.annotation.ComponentScan;
+import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.data.redis.core.ValueOperations;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import com.bzkj.sunrise.SunRiseApplication;
-
 import com.bzkj.sunrise.dao.SysCurrentTokenDao;
 import com.bzkj.sunrise.dao.SysStaffDao;
-
 import com.bzkj.sunrise.entity.SysStaff;
 import com.bzkj.sunrise.entity.SysSystemguimenu;
-
 import com.bzkj.sunrise.service.MenuAuthorService;
 import com.bzkj.sunrise.service.SysCurrentTokenService;
 import com.bzkj.sunrise.service.SysStaffService;
@@ -44,6 +45,11 @@ public class DemoApplicationTests {
 	@Autowired
 	MenuAuthorService menuService;
 	
+    @Autowired
+    private RedisTemplate<String,SysStaff> redisTemplate;
+    @Resource(name = "redisTemplate")
+    private ValueOperations<String, SysStaff> vOps;
+	
 
 	private int[] getGroup(String match){
 		int[] arr=new int[4];
@@ -57,9 +63,11 @@ public class DemoApplicationTests {
 	}
 
 	@Test
-	public void contextLoads() {
-		
-		sysCurrentTokenDao.findByToken("6e957cf9-dc8a-4586-883a-fb1f3f7df9eb", "127.0.0.1");
+	public void contextLoads(){
+       SysStaff sta=sysStaffService.verifyStaff("syu", "123456");
+       vOps.set("mykey4", sta);
+
+        System.out.println(vOps.get("mykey4"));
 	}
 	
 	@Test

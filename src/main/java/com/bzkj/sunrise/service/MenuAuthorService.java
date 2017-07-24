@@ -4,8 +4,13 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.concurrent.TimeUnit;
 
+import javax.annotation.Resource;
+
+import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.ValueOperations;
 import org.springframework.stereotype.Service;
 
 import com.bzkj.sunrise.dao.SysStafftempfuncrightDao;
@@ -15,16 +20,28 @@ import com.bzkj.sunrise.entity.SysSystemguimenu;
 
 @Service
 public class MenuAuthorService {
+	
+	public static Logger log=Logger.getLogger(MenuAuthorService.class);
 
 	@Autowired
 	SysSystemguimenuDao sysSystemguimenuDao;
 	
 	@Autowired
 	SysStafftempfuncrightDao  sysStafftempfuncrightDao;
+    @Resource(name = "redisTemplate")
+    ValueOperations<String, List<SysSystemguimenu>> menuOps;
+    @Autowired
+    ConfigPropertiesService configPropertiesService;
 	
 	//根据staff_id获取当前用户的菜单
 	public List<SysSystemguimenu> menuWithStaff(String staffId){
 		Set<SysSystemguimenu> menuList=new HashSet<SysSystemguimenu>();
+		List<SysSystemguimenu> redisResult=menuOps.get("menu_"+staffId);
+		if(redisResult!=null && redisResult.size()>0){
+			log.info("从redis获取菜单！！！");
+			return redisResult;
+		}
+		
 		//查询临时权限中的菜单
 		List<SysStafftempfuncright> tempRight=sysSystemguimenuDao.allTempFuncRight(staffId);
 		for (SysStafftempfuncright right : tempRight) {
@@ -47,7 +64,9 @@ public class MenuAuthorService {
 		
 		//去除菜单定制隐藏显示
 		menuList.removeAll(sysSystemguimenuDao.hiddenMenu(staffId));
-		
+		menuOps.set("menu_"+staffId, new ArrayList<SysSystemguimenu>(menuList), 
+				configPropertiesService.getTokenExpirationTime(), TimeUnit.MINUTES);
+		log.info("添加菜单到redis！！！");
 		return new ArrayList<SysSystemguimenu>(menuList);
 	}
 
