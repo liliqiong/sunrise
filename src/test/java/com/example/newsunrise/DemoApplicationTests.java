@@ -19,14 +19,14 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.junit4.SpringRunner;
 
-import com.bzkj.sunrise.SunRiseApplication;
-import com.bzkj.sunrise.dao.SysCurrentTokenDao;
-import com.bzkj.sunrise.dao.SysStaffDao;
-import com.bzkj.sunrise.entity.SysStaff;
-import com.bzkj.sunrise.entity.SysSystemguimenu;
-import com.bzkj.sunrise.service.MenuAuthorService;
-import com.bzkj.sunrise.service.SysCurrentTokenService;
-import com.bzkj.sunrise.service.SysStaffService;
+import com.bzh.cloud.dao.sunrise.SysCurrentTokenDao;
+import com.bzh.cloud.dao.sunrise.SysStaffDao;
+import com.bzh.cloud.entity.sunrise.SysStaff;
+import com.bzh.cloud.entity.sunrise.SysSystemguimenu;
+import com.bzh.cloud.service.sunrise.MenuAuthorService;
+import com.bzh.cloud.service.sunrise.SysCurrentTokenService;
+import com.bzh.cloud.service.sunrise.SysStaffService;
+import com.bzh.colud.sunrise.SunRiseApplication;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @SpringBootTest(classes = SunRiseApplication.class)

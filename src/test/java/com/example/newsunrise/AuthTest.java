@@ -16,7 +16,7 @@ import org.apache.http.message.BasicNameValuePair;
 import org.apache.http.util.EntityUtils;
 import org.junit.Test;
 
-import com.bzkj.sunrise.util.Singture;
+import com.bzh.cloud.util.sunrise.Singture;
 
 
 public class AuthTest {

@@ -5,7 +5,7 @@ import java.util.regex.Pattern;
 
 import org.junit.Test;
 
-import com.bzkj.sunrise.util.Underline2Camel;
+import com.bzh.cloud.util.sunrise.Underline2Camel;
 
 public class SomeTest {
 
