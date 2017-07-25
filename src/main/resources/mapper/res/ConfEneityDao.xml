@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" ?> 
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.bzkj.sunrise.dao.ConfEneityDao">
+<mapper namespace="com.bzh.clod.dao.sunrise.ConfEneityDao">
 <!--     <resultMap type="com.bzkj.sunrise.entity.ConfEntity" id="entityRes">  
         <id column="p_id" property="id"/>  
         <result column="name" property="name"/>  

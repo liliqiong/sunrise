@@ -78,7 +78,7 @@ spring:
 mybatis:
 #  config-location: classpath:config/mybatis-spring.xml
   mapper-locations: classpath:mapper/res/*.xml
-  type-aliases-package: com.bzkj.sunrise.entity
+  type-aliases-package: com.bzh.cloud.entity.sunrise
 
 # 日志配置
 logging:

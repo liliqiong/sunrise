@@ -9,13 +9,12 @@ import org.springframework.context.annotation.ComponentScan;
 
 
 @SpringBootApplication
-@ComponentScan(basePackages={"com.bzkj.sunrise"})
-@MapperScan(basePackages = "com.bzkj.sunrise.dao")
+@ComponentScan(basePackages={"com.bzh.cloud"})
+@MapperScan(basePackages = "com.bzh.cloud.dao.sunrise")
 public class SunRiseApplication {
 		
 	public static void main(String[] args) {
 		SpringApplication.run(SunRiseApplication.class, args);
-		
-	 
+			 
 	}
 }
