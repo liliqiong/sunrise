@@ -56,7 +56,7 @@ public class AuthorController {
 		SysCurrentToken cToken=sysStaffService.verifyToken(token,ip);
 		if(cToken==null){
 			map.put("success", "false");
-			map.put("msg", "当前token无效，请重新登录");
+			map.put("msg", "当前ticket无效，请重新登录");
 			return map;
 		}
 		
@@ -77,7 +77,7 @@ public class AuthorController {
 		SysCurrentToken cToken=sysStaffService.verifyToken(token,ip);
 		if(cToken==null){ 
 			map.put("success", "false");
-			map.put("msg", "当前token无效，请重新登录");
+			map.put("msg", "当前ticket无效，请重新登录");
 			return map;
 		}
 		
@@ -122,7 +122,7 @@ public class AuthorController {
 			//用户在当前IP登录
 			if(ip.equals(cToken.getRequestIp())){
 				map.put("success", "true");
-				map.put("msg", cToken.getToken());	
+				map.put("ticket", cToken.getToken());	
 				return map;
 			}else{
 				map.put("success", "false");
@@ -135,7 +135,7 @@ public class AuthorController {
 		//新建一个token返回给用户
 		SysCurrentToken token=sysStaffService.createToken(staff.getStaffId(), ip);
 		map.put("success", "true");
-		map.put("token", token.getToken());
+		map.put("ticket", token.getToken());
 		return map;
 		
 	}	

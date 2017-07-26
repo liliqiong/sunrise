@@ -93,7 +93,7 @@ public class SysRole extends Model<SysRole>{
 	public String getValidflag() {
 		return this.validflag;
 	}
-
+	            
 	public void setValidflag(String validflag) {
 		this.validflag = validflag;
 	}

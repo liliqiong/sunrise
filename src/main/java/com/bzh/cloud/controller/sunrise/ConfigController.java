@@ -1,6 +1,7 @@
 package com.bzh.cloud.controller.sunrise;
 
 import java.lang.reflect.Field;
+import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -21,6 +22,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import com.baomidou.mybatisplus.mapper.BaseMapper;
 import com.bzh.cloud.dao.sunrise.ConfEntityDao;
 import com.bzh.cloud.entity.sunrise.ConfEntity;
+import com.bzh.cloud.entity.sunrise.SysRole;
 import com.bzh.cloud.service.sunrise.ConfEntityService;
 import com.bzh.cloud.util.sunrise.AaAmap;
 import com.bzh.cloud.util.sunrise.SpringUtil;
@@ -118,7 +120,18 @@ public class ConfigController {
 		
 		data.forEach((K,V)->{
 			Field f=ReflectionUtils.findField(clzz, K);
-			ReflectionUtils.setField(f, entity, V);
+			Method m=null;
+			try {
+				m = clzz.getMethod("set"+upFist(K), String.class);
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			System.out.println("set"+upFist(K));
+			System.out.println(V);
+			System.out.println(m);
+			ReflectionUtils.invokeMethod(m, entity, V);
+			//ReflectionUtils.setField(f, entity, V);
 		});
 		System.out.println(entity);
 		return map;
@@ -148,7 +161,7 @@ public class ConfigController {
 	private Object getObj(String entityName){
 		Class<?> clzz=null;
 		try {
-			clzz=Class.forName("com.bzkj.sunrise.entity."+entityName);
+			clzz=Class.forName("com.bzh.cloud.entity.sunrise."+entityName);
 		} catch (ClassNotFoundException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -166,7 +179,7 @@ public class ConfigController {
 	private Class getClass(String entityName){
 		Class clzz=null;
 		try {
-			clzz=Class.forName("com.bzkj.sunrise.entity."+entityName);
+			clzz=Class.forName("com.bzh.cloud.entity.sunrise."+entityName);
 		} catch (ClassNotFoundException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
