@@ -56,7 +56,7 @@ public class DataAthorService {
 				sysStafftempdatarightDao.update(right, new Wrapper<SysStafftempdataright>() {
 					@Override
 					public String getSqlSegment() {
-						System.out.println("111111111111111111111");
+						//System.out.println("111111111111111111111");
 						return null;
 					}
 				});

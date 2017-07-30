@@ -22,7 +22,7 @@ public class SysDepart extends Model<SysDepart> {
 	private static final long serialVersionUID = 1L;
 
 
-
+	
 	private String departId;
 	
 	

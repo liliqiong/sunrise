@@ -3,6 +3,7 @@ package com.bzh.cloud.entity.sunrise;
 import java.io.Serializable;
 import java.util.Date;
 
+
 import com.baomidou.mybatisplus.activerecord.Model;
 
 /**
@@ -19,13 +20,17 @@ public class SysRole extends Model<SysRole>{
 	// Fields
 	//角色编码
 	private String roleCode;
+	private String dataCode;
 	private String roleName;
+	//数据类型 0-资源权限 1-数据特权（行列数）9-网别 P-产品权限 D-资源权限 S-服务权限 K-包权限
+	private String dataType;
 	//'角色属性：0－功能权限角色，1－资源数据权限角色，2－数据特权角色 可扩展',
 	private String roleAttr;
 	private String remark;
 	
 	//'有效0 ；无效1
 	private String validflag;
+	//@DateTimeFormat(pattern = "yyyy-MM-dd")  
 	private Date updateTime;
 	private String updateStaffId;
 	private String updateDepartId;
@@ -127,5 +132,34 @@ public class SysRole extends Model<SysRole>{
 		// TODO Auto-generated method stub
 		return null;
 	}
+	
+	
+
+	public String getDataType() {
+		return dataType;
+	}
+
+	public void setDataType(String dataType) {
+		this.dataType = dataType;
+	}
+
+	@Override
+	public String toString() {
+		return "SysRole [roleCode=" + roleCode + ", roleName=" + roleName
+				+ ", roleAttr=" + roleAttr + ", remark=" + remark
+				+ ", validflag=" + validflag + ", updateTime=" + updateTime
+				+ ", updateStaffId=" + updateStaffId + ", updateDepartId="
+				+ updateDepartId + "]";
+	}
+
+	public String getDataCode() {
+		return dataCode;
+	}
+
+	public void setDataCode(String dataCode) {
+		this.dataCode = dataCode;
+	}
+	
+	
 
 }

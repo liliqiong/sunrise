@@ -20,7 +20,9 @@ public class ConfFields extends Model<ConfFields> {
 	private String hidden;
 	private String renderer;
 	private Integer width;
-	private String datasql;
+	private String dataSql;
+	private String allowBlank;
+	private String checkSql;
 
 	// Constructors
 
@@ -97,13 +99,7 @@ public class ConfFields extends Model<ConfFields> {
 		this.width = width;
 	}
 
-	public String getDatasql() {
-		return this.datasql;
-	}
 
-	public void setDatasql(String datasql) {
-		this.datasql = datasql;
-	}
 
 	@Override
 	protected Serializable pkVal() {
@@ -111,4 +107,36 @@ public class ConfFields extends Model<ConfFields> {
 		return null;
 	}
 
+
+	public String getAllowBlank() {
+		return allowBlank;
+	}
+
+
+	public void setAllowBlank(String allowBlank) {
+		this.allowBlank = allowBlank;
+	}
+
+
+	public String getDataSql() {
+		return dataSql;
+	}
+
+
+	public void setDataSql(String dataSql) {
+		this.dataSql = dataSql;
+	}
+
+
+	public String getCheckSql() {
+		return checkSql;
+	}
+
+
+	public void setCheckSql(String checkSql) {
+		this.checkSql = checkSql;
+	}
+	
+	
+	
 }

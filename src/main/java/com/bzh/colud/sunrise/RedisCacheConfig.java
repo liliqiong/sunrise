@@ -8,6 +8,8 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.data.redis.cache.RedisCacheManager;
 import org.springframework.data.redis.connection.RedisConnectionFactory;
 import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.web.filter.CharacterEncodingFilter;
+
 
 
 /** 
@@ -63,6 +65,16 @@ public class RedisCacheConfig extends CachingConfigurerSupport {
 		// redisTemplate.setHashKeySerializer(redisSerializer);
 		return redisTemplate;
 
+	}
+	
+
+
+	@Bean
+	public CharacterEncodingFilter characterEncodingFilter() {
+	  CharacterEncodingFilter characterEncodingFilter =new CharacterEncodingFilter();
+	  characterEncodingFilter.setEncoding("UTF-8");
+	  characterEncodingFilter.setForceEncoding(true);
+	  return characterEncodingFilter;
 	}
 
 }
