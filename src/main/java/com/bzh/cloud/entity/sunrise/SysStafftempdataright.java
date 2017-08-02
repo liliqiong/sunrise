@@ -4,6 +4,7 @@ import java.io.Serializable;
 import java.util.Date;
 
 import com.baomidou.mybatisplus.activerecord.Model;
+import com.baomidou.mybatisplus.annotations.TableId;
 
 /**
  *员工临时数据权限表
@@ -18,6 +19,14 @@ public class SysStafftempdataright extends Model<SysStafftempdataright>{
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
+	@TableId
+	private String id;
+	public String getId() {
+		return id;
+	}
+	public void setId(String id) {
+		this.id = id;
+	}
 	private String staffId;
 
 	private String dataCode;
@@ -209,135 +218,35 @@ public class SysStafftempdataright extends Model<SysStafftempdataright>{
 		this.updateDepartId = updateDepartId;
 	}
 
-	public boolean equals(Object other) {
-		if ((this == other))
-			return true;
-		if ((other == null))
-			return false;
-		if (!(other instanceof SysStafftempdataright))
-			return false;
-		SysStafftempdataright castOther = (SysStafftempdataright) other;
 
-		return ((this.getStaffId() == castOther.getStaffId()) || (this
-				.getStaffId() != null && castOther.getStaffId() != null && this
-				.getStaffId().equals(castOther.getStaffId())))
-				&& ((this.getDataCode() == castOther.getDataCode()) || (this
-						.getDataCode() != null
-						&& castOther.getDataCode() != null && this
-						.getDataCode().equals(castOther.getDataCode())))
-				&& ((this.getDataType() == castOther.getDataType()) || (this
-						.getDataType() != null
-						&& castOther.getDataType() != null && this
-						.getDataType().equals(castOther.getDataType())))
-				&& ((this.getRightClass() == castOther.getRightClass()) || (this
-						.getRightClass() != null
-						&& castOther.getRightClass() != null && this
-						.getRightClass().equals(castOther.getRightClass())))
-				&& ((this.getOperSpecial() == castOther.getOperSpecial()) || (this
-						.getOperSpecial() != null
-						&& castOther.getOperSpecial() != null && this
-						.getOperSpecial().equals(castOther.getOperSpecial())))
-				&& ((this.getAccreditTime() == castOther.getAccreditTime()) || (this
-						.getAccreditTime() != null
-						&& castOther.getAccreditTime() != null && this
-						.getAccreditTime().equals(castOther.getAccreditTime())))
-				&& ((this.getAccreditStaffId() == castOther
-						.getAccreditStaffId()) || (this.getAccreditStaffId() != null
-						&& castOther.getAccreditStaffId() != null && this
-						.getAccreditStaffId().equals(
-								castOther.getAccreditStaffId())))
-				&& ((this.getUseTag() == castOther.getUseTag()) || (this
-						.getUseTag() != null && castOther.getUseTag() != null && this
-						.getUseTag().equals(castOther.getUseTag())))
-				&& ((this.getTimes() == castOther.getTimes()) || (this
-						.getTimes() != null && castOther.getTimes() != null && this
-						.getTimes().equals(castOther.getTimes())))
-				&& ((this.getUsedTimes() == castOther.getUsedTimes()) || (this
-						.getUsedTimes() != null
-						&& castOther.getUsedTimes() != null && this
-						.getUsedTimes().equals(castOther.getUsedTimes())))
-				&& ((this.getStartDate() == castOther.getStartDate()) || (this
-						.getStartDate() != null
-						&& castOther.getStartDate() != null && this
-						.getStartDate().equals(castOther.getStartDate())))
-				&& ((this.getEndDate() == castOther.getEndDate()) || (this
-						.getEndDate() != null && castOther.getEndDate() != null && this
-						.getEndDate().equals(castOther.getEndDate())))
-				&& ((this.getRemark() == castOther.getRemark()) || (this
-						.getRemark() != null && castOther.getRemark() != null && this
-						.getRemark().equals(castOther.getRemark())))
-				&& ((this.getUpdateTime() == castOther.getUpdateTime()) || (this
-						.getUpdateTime() != null
-						&& castOther.getUpdateTime() != null && this
-						.getUpdateTime().equals(castOther.getUpdateTime())))
-				&& ((this.getUpdateStaffId() == castOther.getUpdateStaffId()) || (this
-						.getUpdateStaffId() != null
-						&& castOther.getUpdateStaffId() != null && this
-						.getUpdateStaffId()
-						.equals(castOther.getUpdateStaffId())))
-				&& ((this.getUpdateDepartId() == castOther.getUpdateDepartId()) || (this
-						.getUpdateDepartId() != null
-						&& castOther.getUpdateDepartId() != null && this
-						.getUpdateDepartId().equals(
-								castOther.getUpdateDepartId())));
-	}
 
+	@Override
 	public int hashCode() {
-		int result = 17;
-
-		result = 37 * result
-				+ (getStaffId() == null ? 0 : this.getStaffId().hashCode());
-		result = 37 * result
-				+ (getDataCode() == null ? 0 : this.getDataCode().hashCode());
-		result = 37 * result
-				+ (getDataType() == null ? 0 : this.getDataType().hashCode());
-		result = 37
-				* result
-				+ (getRightClass() == null ? 0 : this.getRightClass()
-						.hashCode());
-		result = 37
-				* result
-				+ (getOperSpecial() == null ? 0 : this.getOperSpecial()
-						.hashCode());
-		result = 37
-				* result
-				+ (getAccreditTime() == null ? 0 : this.getAccreditTime()
-						.hashCode());
-		result = 37
-				* result
-				+ (getAccreditStaffId() == null ? 0 : this.getAccreditStaffId()
-						.hashCode());
-		result = 37 * result
-				+ (getUseTag() == null ? 0 : this.getUseTag().hashCode());
-		result = 37 * result
-				+ (getTimes() == null ? 0 : this.getTimes().hashCode());
-		result = 37 * result
-				+ (getUsedTimes() == null ? 0 : this.getUsedTimes().hashCode());
-		result = 37 * result
-				+ (getStartDate() == null ? 0 : this.getStartDate().hashCode());
-		result = 37 * result
-				+ (getEndDate() == null ? 0 : this.getEndDate().hashCode());
-		result = 37 * result
-				+ (getRemark() == null ? 0 : this.getRemark().hashCode());
-		result = 37
-				* result
-				+ (getUpdateTime() == null ? 0 : this.getUpdateTime()
-						.hashCode());
-		result = 37
-				* result
-				+ (getUpdateStaffId() == null ? 0 : this.getUpdateStaffId()
-						.hashCode());
-		result = 37
-				* result
-				+ (getUpdateDepartId() == null ? 0 : this.getUpdateDepartId()
-						.hashCode());
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((id == null) ? 0 : id.hashCode());
 		return result;
 	}
-
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		SysStafftempdataright other = (SysStafftempdataright) obj;
+		if (id == null) {
+			if (other.id != null)
+				return false;
+		} else if (!id.equals(other.id))
+			return false;
+		return true;
+	}
 	@Override
 	protected Serializable pkVal() {
 		// TODO Auto-generated method stub
-		return null;
+		return id;
 	}
 
 }

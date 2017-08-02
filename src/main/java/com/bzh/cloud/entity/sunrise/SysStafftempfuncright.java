@@ -4,6 +4,7 @@ import java.io.Serializable;
 import java.util.Date;
 
 import com.baomidou.mybatisplus.activerecord.Model;
+import com.baomidou.mybatisplus.annotations.TableId;
 
 /**
  * 员工临时功能权限表
@@ -17,6 +18,14 @@ public class SysStafftempfuncright extends Model<SysStafftempfuncright> {
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
+	@TableId
+	private String id;
+	public String getId() {
+		return id;
+	}
+	public void setId(String id) {
+		this.id = id;
+	}
 	// Fields
 	private String staffId;
 	private String rightCode;
@@ -154,7 +163,7 @@ public class SysStafftempfuncright extends Model<SysStafftempfuncright> {
 	@Override
 	protected Serializable pkVal() {
 		// TODO Auto-generated method stub
-		return null;
+		return id;
 	}
 
 }

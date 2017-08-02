@@ -4,8 +4,10 @@ import java.io.Serializable;
 import java.util.Date;
 
 import com.baomidou.mybatisplus.activerecord.Model;
+import com.baomidou.mybatisplus.annotations.TableId;
 
 /**
+ * 角色数据权限表
  */
 public class SysRoledataright extends Model<SysRoledataright> {
 
@@ -13,6 +15,14 @@ public class SysRoledataright extends Model<SysRoledataright> {
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
+	@TableId
+	private String id;
+	public String getId() {
+		return id;
+	}
+	public void setId(String id) {
+		this.id = id;
+	}
 	// Fields
 	private String roleCode;
 	private String dataCode;
@@ -103,7 +113,7 @@ public class SysRoledataright extends Model<SysRoledataright> {
 	@Override
 	protected Serializable pkVal() {
 		// TODO Auto-generated method stub
-		return null;
+		return id;
 	}
 
 }

@@ -4,6 +4,7 @@ import java.io.Serializable;
 import java.util.Date;
 
 import com.baomidou.mybatisplus.activerecord.Model;
+import com.baomidou.mybatisplus.annotations.TableId;
 
 /**
  * 
@@ -19,6 +20,14 @@ public class SysSysClass extends Model<SysSysClass> {
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
+	@TableId
+	private String id;
+	public String getId() {
+		return id;
+	}
+	public void setId(String id) {
+		this.id = id;
+	}
 	//分类编码：将相同功能组合合为一类，由我们定义，与字系统由不同之处
 	private String classCode;
 	private String className;
@@ -99,69 +108,35 @@ public class SysSysClass extends Model<SysSysClass> {
 		this.updateDepartId = updateDepartId;
 	}
 
-	public boolean equals(Object other) {
-		if ((this == other))
-			return true;
-		if ((other == null))
-			return false;
-		if (!(other instanceof SysSysClass))
-			return false;
-		SysSysClass castOther = (SysSysClass) other;
+	
 
-		return ((this.getClassCode() == castOther.getClassCode()) || (this
-				.getClassCode() != null && castOther.getClassCode() != null && this
-				.getClassCode().equals(castOther.getClassCode())))
-				&& ((this.getClassName() == castOther.getClassName()) || (this
-						.getClassName() != null
-						&& castOther.getClassName() != null && this
-						.getClassName().equals(castOther.getClassName())))
-				&& ((this.getRemark() == castOther.getRemark()) || (this
-						.getRemark() != null && castOther.getRemark() != null && this
-						.getRemark().equals(castOther.getRemark())))
-				&& ((this.getUpdateTime() == castOther.getUpdateTime()) || (this
-						.getUpdateTime() != null
-						&& castOther.getUpdateTime() != null && this
-						.getUpdateTime().equals(castOther.getUpdateTime())))
-				&& ((this.getUpdateStaffId() == castOther.getUpdateStaffId()) || (this
-						.getUpdateStaffId() != null
-						&& castOther.getUpdateStaffId() != null && this
-						.getUpdateStaffId()
-						.equals(castOther.getUpdateStaffId())))
-				&& ((this.getUpdateDepartId() == castOther.getUpdateDepartId()) || (this
-						.getUpdateDepartId() != null
-						&& castOther.getUpdateDepartId() != null && this
-						.getUpdateDepartId().equals(
-								castOther.getUpdateDepartId())));
-	}
-
+	@Override
 	public int hashCode() {
-		int result = 17;
-
-		result = 37 * result
-				+ (getClassCode() == null ? 0 : this.getClassCode().hashCode());
-		result = 37 * result
-				+ (getClassName() == null ? 0 : this.getClassName().hashCode());
-		result = 37 * result
-				+ (getRemark() == null ? 0 : this.getRemark().hashCode());
-		result = 37
-				* result
-				+ (getUpdateTime() == null ? 0 : this.getUpdateTime()
-						.hashCode());
-		result = 37
-				* result
-				+ (getUpdateStaffId() == null ? 0 : this.getUpdateStaffId()
-						.hashCode());
-		result = 37
-				* result
-				+ (getUpdateDepartId() == null ? 0 : this.getUpdateDepartId()
-						.hashCode());
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((id == null) ? 0 : id.hashCode());
 		return result;
 	}
-
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		SysSysClass other = (SysSysClass) obj;
+		if (id == null) {
+			if (other.id != null)
+				return false;
+		} else if (!id.equals(other.id))
+			return false;
+		return true;
+	}
 	@Override
 	protected Serializable pkVal() {
 		// TODO Auto-generated method stub
-		return null;
+		return id;
 	}
 
 }

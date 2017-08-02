@@ -4,6 +4,7 @@ import java.io.Serializable;
 import java.util.Date;
 
 import com.baomidou.mybatisplus.activerecord.Model;
+import com.baomidou.mybatisplus.annotations.TableId;
 
 /**
  * 模块编码表
@@ -15,6 +16,14 @@ public class SysModfile extends Model<SysModfile>  {
 	 */
 	private static final long serialVersionUID = 1L;
 	// Fields
+	@TableId
+	private String id;
+	public String getId() {
+		return id;
+	}
+	public void setId(String id) {
+		this.id = id;
+	}
 	//模块编码：子系统编码＋三位序列
 	private String modCode;
 	//唯一
@@ -110,73 +119,35 @@ public class SysModfile extends Model<SysModfile>  {
 		this.updateDepartId = updateDepartId;
 	}
 
-	public boolean equals(Object other) {
-		if ((this == other))
-			return true;
-		if ((other == null))
-			return false;
-		if (!(other instanceof SysModfile))
-			return false;
-		SysModfile castOther = (SysModfile) other;
+	
 
-		return ((this.getModCode() == castOther.getModCode()) || (this
-				.getModCode() != null && castOther.getModCode() != null && this
-				.getModCode().equals(castOther.getModCode())))
-				&& ((this.getModName() == castOther.getModName()) || (this
-						.getModName() != null && castOther.getModName() != null && this
-						.getModName().equals(castOther.getModName())))
-				&& ((this.getModType() == castOther.getModType()) || (this
-						.getModType() != null && castOther.getModType() != null && this
-						.getModType().equals(castOther.getModType())))
-				&& ((this.getRemark() == castOther.getRemark()) || (this
-						.getRemark() != null && castOther.getRemark() != null && this
-						.getRemark().equals(castOther.getRemark())))
-				&& ((this.getUpdateTime() == castOther.getUpdateTime()) || (this
-						.getUpdateTime() != null
-						&& castOther.getUpdateTime() != null && this
-						.getUpdateTime().equals(castOther.getUpdateTime())))
-				&& ((this.getUpdateStaffId() == castOther.getUpdateStaffId()) || (this
-						.getUpdateStaffId() != null
-						&& castOther.getUpdateStaffId() != null && this
-						.getUpdateStaffId()
-						.equals(castOther.getUpdateStaffId())))
-				&& ((this.getUpdateDepartId() == castOther.getUpdateDepartId()) || (this
-						.getUpdateDepartId() != null
-						&& castOther.getUpdateDepartId() != null && this
-						.getUpdateDepartId().equals(
-								castOther.getUpdateDepartId())));
-	}
-
+	@Override
 	public int hashCode() {
-		int result = 17;
-
-		result = 37 * result
-				+ (getModCode() == null ? 0 : this.getModCode().hashCode());
-		result = 37 * result
-				+ (getModName() == null ? 0 : this.getModName().hashCode());
-		result = 37 * result
-				+ (getModType() == null ? 0 : this.getModType().hashCode());
-		result = 37 * result
-				+ (getRemark() == null ? 0 : this.getRemark().hashCode());
-		result = 37
-				* result
-				+ (getUpdateTime() == null ? 0 : this.getUpdateTime()
-						.hashCode());
-		result = 37
-				* result
-				+ (getUpdateStaffId() == null ? 0 : this.getUpdateStaffId()
-						.hashCode());
-		result = 37
-				* result
-				+ (getUpdateDepartId() == null ? 0 : this.getUpdateDepartId()
-						.hashCode());
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((id == null) ? 0 : id.hashCode());
 		return result;
 	}
-
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		SysModfile other = (SysModfile) obj;
+		if (id == null) {
+			if (other.id != null)
+				return false;
+		} else if (!id.equals(other.id))
+			return false;
+		return true;
+	}
 	@Override
 	protected Serializable pkVal() {
 		// TODO Auto-generated method stub
-		return null;
+		return id;
 	}
 
 }

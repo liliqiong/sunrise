@@ -7,10 +7,13 @@ import java.util.List;
 import java.util.Map;
 
 
+import java.util.UUID;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import javax.servlet.http.HttpServletRequest;
+
+
 
 
 
@@ -44,11 +47,14 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 
 
+
+
 import com.baomidou.mybatisplus.mapper.BaseMapper;
 import com.baomidou.mybatisplus.mapper.Wrapper;
 import com.bzh.cloud.dao.sunrise.ConfEntityDao;
 import com.bzh.cloud.entity.sunrise.ConfEntity;
 import com.bzh.cloud.service.sunrise.ConfEntityService;
+import com.bzh.cloud.util.sunrise.AaAListMap;
 import com.bzh.cloud.util.sunrise.AaAmap;
 import com.bzh.cloud.util.sunrise.SpringUtil;
 import com.bzh.cloud.util.sunrise.SqlUtil;
@@ -82,18 +88,10 @@ public class ConfigController {
 	public Map<String, Object> tree(Integer parentId){
 		Map<String, Object> map=new HashMap<>();
 		map.put("success", true);
-		List<Map<String,Object>> child=new ArrayList<Map<String,Object>>();
-		child.add(new HashMap<String , Object>(){
-			{  
-			     put("id", 1);  
-			     put("text", "目录1");  
-			 }}  );
-		child.add(new HashMap<String , Object>(){
-			{  
-			     put("id", 2);  
-			     put("text", "目录2");  
-			 }}  );
-		map.put("children", child);
+		
+		String sql="select * from conf_tree where parent_id=?";
+		List<Map<String,Object>> child=jdbcTemplate.queryForList(sql, parentId);
+		map.put("children", new AaAListMap(child));
 		return map;
 	}
 	
@@ -150,6 +148,7 @@ public class ConfigController {
 		int start=Integer.valueOf( queryParam.get("start"));
 		int limit=Integer.valueOf( queryParam.get("limit"));
 		String sql=confEntityDao.selectById(entityName).getQuerySql();
+		System.out.println(sql);
 		sql=SqlUtil.formartSql(sql, queryParam);
 		
 		String countSql=SqlUtil.countSql(sql);
@@ -171,10 +170,12 @@ public class ConfigController {
 	
 	@RequestMapping(value="/create")
 	@ResponseBody
-	public Map<String, String> createEntity(String jsonStr){		
+	public Map<String, String> createEntity(String jsonStr){	
 		Map<String, String> map=new HashMap<String, String>();
 		JSONObject jsonO = JSONObject.fromObject(jsonStr);
 		String entityName=jsonO.getString("entityName");
+		//jsonO.put("id", UUID.randomUUID().toString());
+		System.out.println(jsonO);
 		BaseMapper bm=(BaseMapper) SpringUtil.getBean(entityName+"Dao");
 		Object sr = JSONObject.toBean(jsonO,getClass(upFist(entityName)));
 		bm.insert(sr);
@@ -185,19 +186,29 @@ public class ConfigController {
 	
 	@RequestMapping(value="/update")
 	@ResponseBody
-	public Map<String, String> updateEntity(String jsonStr){		
+	public Map<String, String> updateEntity(String jsonStr){	
+		System.out.println(jsonStr);
 		Map<String, String> map=new HashMap<String, String>();
 		JSONObject jsonO = JSONObject.fromObject(jsonStr);
 		String entityName=jsonO.getString("entityName");
 		BaseMapper bm=(BaseMapper) SpringUtil.getBean(entityName+"Dao");
 		Object sr = JSONObject.toBean(jsonO,getClass(upFist(entityName)));
-		bm.update(sr, new Wrapper() {
-			@Override
-			public String getSqlSegment() {
-				return null;
-			}
-		});
+		bm.updateById(sr);
 		System.out.println(sr);
+		map.put("success", "true");
+		return map;
+	}
+	
+	@RequestMapping(value="/delete")
+	@ResponseBody
+	public Map<String, String> delete(String jsonStr){	
+		System.out.println(jsonStr);
+		Map<String, String> map=new HashMap<String, String>();
+		JSONObject jsonO = JSONObject.fromObject(jsonStr);
+		String entityName=jsonO.getString("entityName");
+		BaseMapper bm=(BaseMapper) SpringUtil.getBean(entityName+"Dao");
+		String id=jsonO.getString("id");
+		bm.deleteById(id);
 		map.put("success", "true");
 		return map;
 	}

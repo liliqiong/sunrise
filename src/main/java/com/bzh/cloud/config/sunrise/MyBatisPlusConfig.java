@@ -79,7 +79,7 @@ public class MyBatisPlusConfig {
     GlobalConfiguration globalConfig = new GlobalConfiguration();
     globalConfig.setDbType(DBType.MYSQL.name());//数据库类型
     // ID 策略 AUTO->`0`("数据库ID自增") INPUT->`1`(用户输入ID") ID_WORKER->`2`("全局唯一ID") UUID->`3`("全局唯一ID")
-    globalConfig.setIdType(2);
+    globalConfig.setIdType(3);
     //MP 属性下划线 转 驼峰 , 如果原生配置 mc.setMapUnderscoreToCamelCase(true) 开启，该配置可以无。
     //globalConfig.setDbColumnUnderline(true);
     mybatisPlus.setGlobalConfig(globalConfig);

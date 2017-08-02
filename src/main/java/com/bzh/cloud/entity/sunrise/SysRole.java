@@ -3,14 +3,17 @@ package com.bzh.cloud.entity.sunrise;
 import java.io.Serializable;
 import java.util.Date;
 
-
 import com.baomidou.mybatisplus.activerecord.Model;
+import com.baomidou.mybatisplus.annotations.TableId;
+import com.baomidou.mybatisplus.annotations.TableName;
 
 /**
  * 角色编码表
  * 保存角色编码参数信息
  *
  */
+
+@TableName("sys_role")
 public class SysRole extends Model<SysRole>{
 
 	/**
@@ -18,6 +21,8 @@ public class SysRole extends Model<SysRole>{
 	 */
 	private static final long serialVersionUID = 1L;
 	// Fields
+	@TableId
+	private String id;
 	//角色编码
 	private String roleCode;
 	private String dataCode;
@@ -41,26 +46,7 @@ public class SysRole extends Model<SysRole>{
 	public SysRole() {
 	}
 
-	/** minimal constructor */
-	public SysRole(String roleCode, String roleAttr, String validflag) {
-		this.roleCode = roleCode;
-		this.roleAttr = roleAttr;
-		this.validflag = validflag;
-	}
 
-	/** full constructor */
-	public SysRole(String roleCode, String roleName, String roleAttr,
-			String remark, String validflag, Date updateTime,
-			String updateStaffId, String updateDepartId) {
-		this.roleCode = roleCode;
-		this.roleName = roleName;
-		this.roleAttr = roleAttr;
-		this.remark = remark;
-		this.validflag = validflag;
-		this.updateTime = updateTime;
-		this.updateStaffId = updateStaffId;
-		this.updateDepartId = updateDepartId;
-	}
 
 	// Property accessors
 	public String getRoleCode() {
@@ -130,7 +116,7 @@ public class SysRole extends Model<SysRole>{
 	@Override
 	protected Serializable pkVal() {
 		// TODO Auto-generated method stub
-		return null;
+		return this.getId();
 	}
 	
 	
@@ -143,14 +129,18 @@ public class SysRole extends Model<SysRole>{
 		this.dataType = dataType;
 	}
 
+
 	@Override
 	public String toString() {
-		return "SysRole [roleCode=" + roleCode + ", roleName=" + roleName
-				+ ", roleAttr=" + roleAttr + ", remark=" + remark
+		return "SysRole [id=" + id + ", roleCode=" + roleCode + ", dataCode="
+				+ dataCode + ", roleName=" + roleName + ", dataType="
+				+ dataType + ", roleAttr=" + roleAttr + ", remark=" + remark
 				+ ", validflag=" + validflag + ", updateTime=" + updateTime
 				+ ", updateStaffId=" + updateStaffId + ", updateDepartId="
 				+ updateDepartId + "]";
 	}
+
+
 
 	public String getDataCode() {
 		return dataCode;
@@ -158,6 +148,14 @@ public class SysRole extends Model<SysRole>{
 
 	public void setDataCode(String dataCode) {
 		this.dataCode = dataCode;
+	}
+
+	public String getId() {
+		return id;
+	}
+
+	public void setId(String id) {
+		this.id = id;
 	}
 	
 	

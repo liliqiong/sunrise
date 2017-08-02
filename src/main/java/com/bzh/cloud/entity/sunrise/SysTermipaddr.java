@@ -4,6 +4,7 @@ import java.io.Serializable;
 import java.util.Date;
 
 import com.baomidou.mybatisplus.activerecord.Model;
+import com.baomidou.mybatisplus.annotations.TableId;
 
 /**
  *终端IP地址表
@@ -18,6 +19,14 @@ public class SysTermipaddr extends Model<SysTermipaddr> {
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
+	@TableId
+	private String id;
+	public String getId() {
+		return id;
+	}
+	public void setId(String id) {
+		this.id = id;
+	}
 	private String ipStart;
 	private String ipEnd;
 
@@ -154,7 +163,7 @@ public class SysTermipaddr extends Model<SysTermipaddr> {
 	@Override
 	protected Serializable pkVal() {
 		// TODO Auto-generated method stub
-		return null;
+		return id;
 	}
 
 }

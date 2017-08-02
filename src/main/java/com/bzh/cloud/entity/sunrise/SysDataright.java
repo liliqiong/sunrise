@@ -4,6 +4,7 @@ import java.io.Serializable;
 import java.util.Date;
 
 import com.baomidou.mybatisplus.activerecord.Model;
+import com.baomidou.mybatisplus.annotations.TableId;
 
 /**
  *数据权限编码表
@@ -16,6 +17,14 @@ public class SysDataright extends Model<SysDataright> {
     /**
 	 * 
 	 */
+	@TableId
+	private String id;
+	public String getId() {
+		return id;
+	}
+	public void setId(String id) {
+		this.id = id;
+	}
 	private static final long serialVersionUID = 1L;
 	//数据编码： 产品、资费和服务等权限采用其对应的参数编码，其它类型权限采用有意义的字母表示
 	private String dataCode;
@@ -124,7 +133,7 @@ public class SysDataright extends Model<SysDataright> {
 	@Override
 	protected Serializable pkVal() {
 		// TODO Auto-generated method stub
-		return null;
+		return id;
 	}
 
 	public String getRightClass() {
@@ -150,33 +159,13 @@ public class SysDataright extends Model<SysDataright> {
 	public void setDataType(String dataType) {
 		this.dataType = dataType;
 	}
-
 	@Override
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
-		result = prime * result
-				+ ((dataCode == null) ? 0 : dataCode.hashCode());
-		result = prime * result
-				+ ((dataName == null) ? 0 : dataName.hashCode());
-		result = prime * result
-				+ ((dataType == null) ? 0 : dataType.hashCode());
-		result = prime * result
-				+ ((operSpecial == null) ? 0 : operSpecial.hashCode());
-		result = prime * result
-				+ ((orderIndex == null) ? 0 : orderIndex.hashCode());
-		result = prime * result + ((remark == null) ? 0 : remark.hashCode());
-		result = prime * result
-				+ ((rightClass == null) ? 0 : rightClass.hashCode());
-		result = prime * result
-				+ ((rightType == null) ? 0 : rightType.hashCode());
-		result = prime * result
-				+ ((updateStaffId == null) ? 0 : updateStaffId.hashCode());
-		result = prime * result
-				+ ((updateTime == null) ? 0 : updateTime.hashCode());
+		result = prime * result + ((id == null) ? 0 : id.hashCode());
 		return result;
 	}
-
 	@Override
 	public boolean equals(Object obj) {
 		if (this == obj)
@@ -186,58 +175,15 @@ public class SysDataright extends Model<SysDataright> {
 		if (getClass() != obj.getClass())
 			return false;
 		SysDataright other = (SysDataright) obj;
-		if (dataCode == null) {
-			if (other.dataCode != null)
+		if (id == null) {
+			if (other.id != null)
 				return false;
-		} else if (!dataCode.equals(other.dataCode))
-			return false;
-		if (dataName == null) {
-			if (other.dataName != null)
-				return false;
-		} else if (!dataName.equals(other.dataName))
-			return false;
-		if (dataType == null) {
-			if (other.dataType != null)
-				return false;
-		} else if (!dataType.equals(other.dataType))
-			return false;
-		if (operSpecial == null) {
-			if (other.operSpecial != null)
-				return false;
-		} else if (!operSpecial.equals(other.operSpecial))
-			return false;
-		if (orderIndex == null) {
-			if (other.orderIndex != null)
-				return false;
-		} else if (!orderIndex.equals(other.orderIndex))
-			return false;
-		if (remark == null) {
-			if (other.remark != null)
-				return false;
-		} else if (!remark.equals(other.remark))
-			return false;
-		if (rightClass == null) {
-			if (other.rightClass != null)
-				return false;
-		} else if (!rightClass.equals(other.rightClass))
-			return false;
-		if (rightType == null) {
-			if (other.rightType != null)
-				return false;
-		} else if (!rightType.equals(other.rightType))
-			return false;
-		if (updateStaffId == null) {
-			if (other.updateStaffId != null)
-				return false;
-		} else if (!updateStaffId.equals(other.updateStaffId))
-			return false;
-		if (updateTime == null) {
-			if (other.updateTime != null)
-				return false;
-		} else if (!updateTime.equals(other.updateTime))
+		} else if (!id.equals(other.id))
 			return false;
 		return true;
 	}
+
+	
 	
 	
 

@@ -4,6 +4,7 @@ import java.io.Serializable;
 import java.util.Date;
 
 import com.baomidou.mybatisplus.activerecord.Model;
+import com.baomidou.mybatisplus.annotations.TableId;
 
 
 /**
@@ -20,7 +21,14 @@ public class SysDepart extends Model<SysDepart> {
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
-
+	@TableId
+	private String id;
+	public String getId() {
+		return id;
+	}
+	public void setId(String id) {
+		this.id = id;
+	}
 
 	
 	private String departId;

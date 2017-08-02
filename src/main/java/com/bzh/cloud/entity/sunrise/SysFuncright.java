@@ -4,6 +4,7 @@ import java.io.Serializable;
 import java.util.Date;
 
 import com.baomidou.mybatisplus.activerecord.Model;
+import com.baomidou.mybatisplus.annotations.TableId;
 
 /**
  * 功能权限编码表
@@ -18,6 +19,14 @@ public class SysFuncright extends Model<SysFuncright>{
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
+	@TableId
+	private String id;
+	public String getId() {
+		return id;
+	}
+	public void setId(String id) {
+		this.id = id;
+	}
 	//权限编码：对于菜单权限－子系统编码＋有意义的英文说明(界面名称或者功能简称)；对于界面控件操作权限－窗体类名＋按钮名
 	private String rightCode;
 	private String rightName;
@@ -147,7 +156,7 @@ public class SysFuncright extends Model<SysFuncright>{
 	@Override
 	protected Serializable pkVal() {
 		// TODO Auto-generated method stub
-		return null;
+		return id;
 	}
 
 }

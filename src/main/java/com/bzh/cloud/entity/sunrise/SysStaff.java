@@ -20,8 +20,17 @@ public class SysStaff extends Model<SysStaff> {
 	 */
 	private static final long serialVersionUID = 1L;
 	// Fields
-	//员工编码：在任何时间内唯一，离职的员工打上标记，不直接删除
+	
 	@TableId
+	private String id;
+	public String getId() {
+		return id;
+	}
+	public void setId(String id) {
+		this.id = id;
+	}
+	
+	//员工编码：在任何时间内唯一，离职的员工打上标记，不直接删除
 	private String staffId;
 	private String departId;
 	private String staffName;
@@ -275,7 +284,7 @@ public class SysStaff extends Model<SysStaff> {
 	}
 
 	protected Serializable pkVal() {
-		return staffId;
+		return id;
 	}
 	
 	

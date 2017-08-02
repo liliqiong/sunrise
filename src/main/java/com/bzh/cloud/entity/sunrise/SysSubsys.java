@@ -6,6 +6,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 import com.baomidou.mybatisplus.activerecord.Model;
+import com.baomidou.mybatisplus.annotations.TableId;
 
 /**
  * 子系统参数表
@@ -20,6 +21,14 @@ public class SysSubsys extends Model<SysSubsys> {
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
+	@TableId
+	private String id;
+	public String getId() {
+		return id;
+	}
+	public void setId(String id) {
+		this.id = id;
+	}
 	private String subsysCode;
 	private String subsysName;
 	private String remark;
@@ -112,7 +121,7 @@ public class SysSubsys extends Model<SysSubsys> {
 	@Override
 	protected Serializable pkVal() {
 		// TODO Auto-generated method stub
-		return null;
+		return id;
 	}
 
 }

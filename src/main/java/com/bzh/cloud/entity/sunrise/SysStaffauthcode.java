@@ -4,6 +4,7 @@ import java.io.Serializable;
 import java.util.Date;
 
 import com.baomidou.mybatisplus.activerecord.Model;
+import com.baomidou.mybatisplus.annotations.TableId;
 
 /**
  * 员工授权码表
@@ -16,6 +17,14 @@ public class SysStaffauthcode extends Model<SysStaffauthcode> {
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
+	@TableId
+	private String id;
+	public String getId() {
+		return id;
+	}
+	public void setId(String id) {
+		this.id = id;
+	}
 	// Fields
 	//员工编码
 	private String staffId;
@@ -125,7 +134,7 @@ public class SysStaffauthcode extends Model<SysStaffauthcode> {
 	@Override
 	protected Serializable pkVal() {
 		// TODO Auto-generated method stub
-		return null;
+		return id;
 	}
 
 }

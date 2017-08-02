@@ -17,6 +17,7 @@ public class ConfFields extends Model<ConfFields> {
 	private String fieldName;
 	private String fieldType;
 	private String fieldText;
+	private String initValid;
 	private String hidden;
 	private String renderer;
 	private Integer width;
@@ -135,6 +136,16 @@ public class ConfFields extends Model<ConfFields> {
 
 	public void setCheckSql(String checkSql) {
 		this.checkSql = checkSql;
+	}
+
+
+	public String getInitValid() {
+		return initValid;
+	}
+
+
+	public void setInitValid(String initValid) {
+		this.initValid = initValid;
 	}
 	
 	

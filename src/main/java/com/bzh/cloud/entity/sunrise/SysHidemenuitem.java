@@ -4,6 +4,7 @@ import java.io.Serializable;
 import java.util.Date;
 
 import com.baomidou.mybatisplus.activerecord.Model;
+import com.baomidou.mybatisplus.annotations.TableId;
 
 /**
  * 菜单定制隐藏显示
@@ -15,6 +16,14 @@ public class SysHidemenuitem extends Model<SysHidemenuitem> {
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
+	@TableId
+	private String id;
+	public String getId() {
+		return id;
+	}
+	public void setId(String id) {
+		this.id = id;
+	}
 	// 复合ID
 	private String staffId;
 	private String menuId;
@@ -122,7 +131,7 @@ public class SysHidemenuitem extends Model<SysHidemenuitem> {
 	@Override
 	protected Serializable pkVal() {
 		// TODO Auto-generated method stub
-		return null;
+		return id;
 	}
 
 }

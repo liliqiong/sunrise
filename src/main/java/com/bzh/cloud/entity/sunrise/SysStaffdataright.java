@@ -4,6 +4,7 @@ import java.io.Serializable;
 import java.util.Date;
 
 import com.baomidou.mybatisplus.activerecord.Model;
+import com.baomidou.mybatisplus.annotations.TableId;
 
 /**
  *员工数据权限表
@@ -17,6 +18,14 @@ public class SysStaffdataright extends Model<SysStaffdataright> {
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
+	@TableId
+	private String id;
+	public String getId() {
+		return id;
+	}
+	public void setId(String id) {
+		this.id = id;
+	}
 	private String staffId;
 	//权限或角色编码：可能是单个的权限编码，也可能是角色编码
 	private String dataCode;
@@ -147,94 +156,35 @@ public class SysStaffdataright extends Model<SysStaffdataright> {
 		this.accreditStaffId = accreditStaffId;
 	}
 
-	public boolean equals(Object other) {
-		if ((this == other))
-			return true;
-		if ((other == null))
-			return false;
-		if (!(other instanceof SysStaffdataright))
-			return false;
-		SysStaffdataright castOther = (SysStaffdataright) other;
+	
 
-		return ((this.getStaffId() == castOther.getStaffId()) || (this
-				.getStaffId() != null && castOther.getStaffId() != null && this
-				.getStaffId().equals(castOther.getStaffId())))
-				&& ((this.getDataCode() == castOther.getDataCode()) || (this
-						.getDataCode() != null
-						&& castOther.getDataCode() != null && this
-						.getDataCode().equals(castOther.getDataCode())))
-				&& ((this.getDataType() == castOther.getDataType()) || (this
-						.getDataType() != null
-						&& castOther.getDataType() != null && this
-						.getDataType().equals(castOther.getDataType())))
-				&& ((this.getRightAttr() == castOther.getRightAttr()) || (this
-						.getRightAttr() != null
-						&& castOther.getRightAttr() != null && this
-						.getRightAttr().equals(castOther.getRightAttr())))
-				&& ((this.getRightClass() == castOther.getRightClass()) || (this
-						.getRightClass() != null
-						&& castOther.getRightClass() != null && this
-						.getRightClass().equals(castOther.getRightClass())))
-				&& ((this.getOperSpecial() == castOther.getOperSpecial()) || (this
-						.getOperSpecial() != null
-						&& castOther.getOperSpecial() != null && this
-						.getOperSpecial().equals(castOther.getOperSpecial())))
-				&& ((this.getRightTag() == castOther.getRightTag()) || (this
-						.getRightTag() != null
-						&& castOther.getRightTag() != null && this
-						.getRightTag().equals(castOther.getRightTag())))
-				&& ((this.getRemark() == castOther.getRemark()) || (this
-						.getRemark() != null && castOther.getRemark() != null && this
-						.getRemark().equals(castOther.getRemark())))
-				&& ((this.getAccreditTime() == castOther.getAccreditTime()) || (this
-						.getAccreditTime() != null
-						&& castOther.getAccreditTime() != null && this
-						.getAccreditTime().equals(castOther.getAccreditTime())))
-				&& ((this.getAccreditStaffId() == castOther
-						.getAccreditStaffId()) || (this.getAccreditStaffId() != null
-						&& castOther.getAccreditStaffId() != null && this
-						.getAccreditStaffId().equals(
-								castOther.getAccreditStaffId())));
-	}
-
+	@Override
 	public int hashCode() {
-		int result = 17;
-
-		result = 37 * result
-				+ (getStaffId() == null ? 0 : this.getStaffId().hashCode());
-		result = 37 * result
-				+ (getDataCode() == null ? 0 : this.getDataCode().hashCode());
-		result = 37 * result
-				+ (getDataType() == null ? 0 : this.getDataType().hashCode());
-		result = 37 * result
-				+ (getRightAttr() == null ? 0 : this.getRightAttr().hashCode());
-		result = 37
-				* result
-				+ (getRightClass() == null ? 0 : this.getRightClass()
-						.hashCode());
-		result = 37
-				* result
-				+ (getOperSpecial() == null ? 0 : this.getOperSpecial()
-						.hashCode());
-		result = 37 * result
-				+ (getRightTag() == null ? 0 : this.getRightTag().hashCode());
-		result = 37 * result
-				+ (getRemark() == null ? 0 : this.getRemark().hashCode());
-		result = 37
-				* result
-				+ (getAccreditTime() == null ? 0 : this.getAccreditTime()
-						.hashCode());
-		result = 37
-				* result
-				+ (getAccreditStaffId() == null ? 0 : this.getAccreditStaffId()
-						.hashCode());
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((id == null) ? 0 : id.hashCode());
 		return result;
 	}
-
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		SysStaffdataright other = (SysStaffdataright) obj;
+		if (id == null) {
+			if (other.id != null)
+				return false;
+		} else if (!id.equals(other.id))
+			return false;
+		return true;
+	}
 	@Override
 	protected Serializable pkVal() {
 		// TODO Auto-generated method stub
-		return null;
+		return id;
 	}
 
 }

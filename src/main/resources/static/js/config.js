@@ -17,11 +17,14 @@ Ext.tree.Panel.addMembers({
         }
     }
 });
-console.log(Ext.grid.Panel);
 
-Ext.grid.Panel.addMembers({
-	config:{
-		formItems:[]
+Ext.form.Basic.override({
+	getValues:function(){
+		var values=this.callParent(arguments);
+		if(values.id && values.id instanceof Array){
+			values.id=values.id[0];
+		}
+		return values;
 	}
 });
 
@@ -39,7 +42,8 @@ Ext.define('Syu.form',{
     defaults: {
         border: 0
     },
-    buttons: [{
+    buttons: [
+    {
         text: '重置',
         handler: function() {
             this.up('form').getForm().reset();
@@ -50,6 +54,7 @@ Ext.define('Syu.form',{
         	var form = this.up('form');
         	var baseForm=form.getForm();
         	var data = baseForm.getValues();
+        	console.log(data);
         	var url='./../conf/create'
         	var entity=form.getEntity();
         	
@@ -82,7 +87,8 @@ Ext.define('Syu.form',{
         		scope:form
         	});
         }
-    }]
+    }
+    ]
 });
 
 
@@ -92,20 +98,14 @@ Ext.define('EntityGrid',{
 		enableTextSelection :true
 	},
 	config:{
-		formItems:[],
-		entity:{}
+		entity:{},
+	    records:{}
 	}
 	
 	,forceFit:true
 	,autohight:true
 	,autoScroll:true
-	,selModel: Ext.create("Ext.selection.CheckboxModel", {
-	    injectCheckbox: 0,//checkbox位于哪一列，默认值为0
-	    mode: "single",//multi,simple,single；默认为多选multi
-	    checkOnly: false,//如果值为true，则只用点击checkbox列才能选中此条记录
-	    allowDeselect: false,//如果值true，并且mode值为单选（single）时，可以通过点击checkbox取消对其的选择
-	    enableKeyNav: true
-	})
+
 	,dockedItems: [{
         xtype: 'pagingtoolbar',
         store: this.store,
@@ -120,22 +120,23 @@ Ext.define('EntityGrid',{
 		        	xtype: 'button',
 		        	text: '增加',
 		        	handler:function(){
-		        		    var items=this.up('grid').getFormItems();
-		        		    var entity=this.up('grid').getEntity();
+		        		    var grid= this.up('grid');
+		        		    var entity=grid.getEntity();
 			        		var curForm=Ext.create('Syu.form',{
-			        			items:items
+			        			items:createFormItems(entity)
 			        		});
 			        		
 			        		curForm.setEntity(entity);
 			        		var win=Ext.create('Ext.window.Window', {
 		        				//id:'win_'+entity.entityName,
 		        			    title: '增加'+entity.title,
-		        			    height: 'auto',
+		        			    height: 200,
 		        			    width: 800,
 		        			    layout: 'fit',
 		        			    items: [curForm] 
 		        			});
-			        		win.show();			        			
+			        		win.show();	
+			        		
 		        	}
 
 		        }
@@ -145,16 +146,13 @@ Ext.define('EntityGrid',{
 		        	text: '修改',
 		        	handler:function(){
 		        		var grid=this.up('grid');
-		        		var items=grid.getFormItems();
 	        		    var entity=grid.getEntity();
 		        		var curForm=Ext.create('Syu.form',{
-		        			items:items
+		        			items:createFormItems(entity)
 		        		});
 		     
-		        		
-		        		curForm.setEntity(entity);
 		        		curForm.setOption('update');
-		        		
+		        		curForm.setEntity(entity);
 		        		console.log(grid.getSelectionModel().getSelection());
 		        		if(grid.getSelectionModel().getSelection().length>0){
 		        			var data=grid.getSelectionModel().getSelection()[0].getData();
@@ -163,12 +161,15 @@ Ext.define('EntityGrid',{
 		        			Ext.Msg.alert('!','先选中一条');
 		        			return;
 		        		}
+		        	    //var input=curForm.down('[name="dataType"]');
+		        	    //console.log(input);
+		        	    //input.setRawValue('ioioioio');
 		        		
 		        		
 	        			Ext.create('Ext.window.Window', {
 	        				//id:'win_'+entity.entityName,
 	        			    title: '修改'+entity.title,
-	        			    height: 'auto',
+	        			    height: 200,
 	        			    width: 800,
 	        			    layout: 'fit',
 	        			    items: [curForm] 
@@ -179,7 +180,40 @@ Ext.define('EntityGrid',{
 		        ,'-'
 		        ,{
 		        	xtype: 'button',
-		        	text: '删除'
+		        	text: '删除',
+		        	handler:function(){		        		
+		        		var grid=this.up('grid');
+	        		    var entity=grid.getEntity();
+		        		if(!grid.getSelectionModel().getSelection().length>0){		        		
+		        			Ext.Msg.alert('!','先选中一条');
+		        			return;
+		        		}
+		        		Ext.Msg.confirm('!','确定删除选中记录？',function(btn){
+		        	        if(btn=='no'){
+		        	            return;							
+		        	          }else{
+		        	       		var data=grid.getSelectionModel().getSelection()[0].getData();
+				        		data.entityName=entity.entityName;
+				            	Ext.Ajax.request({
+				            		method:'post',        		
+				            		url:'./../conf/delete',
+				            		params:{jsonStr:JSON.stringify(data)},
+				            		failure:function(r,data){
+
+				            		},
+				            		success:function(r,data){
+				            			var result = Ext.JSON.decode(r.responseText);
+				            			if(result.success=='true'){
+				            				Ext.Msg.alert('!','成功删除');
+				        
+				            				Ext.getCmp('grid_'+entity.entityName).getStore().reload();
+				            			}
+
+				            		}
+				            	});
+		        	          }
+		        		})		        		
+		        	}
 		        }
 		    ]
 	    }
@@ -188,6 +222,7 @@ Ext.define('EntityGrid',{
 
 Ext.define('WdatePickerTime',{
 	extend:'Ext.form.TextField',
+	xtype:'wdatetime',
 	itemCls:'required-field',
     getRawValue: function() {
 		v = this.callParent();
@@ -219,6 +254,12 @@ Ext.define('WdatePickerTime',{
 Ext.define('Syu.Combox',{
 	extend:'Ext.form.ComboBox',
 	xtype:'syuCombo',
+//	setValue:function(){
+//		this.callParent(arguments);
+//		var value=Array.prototype.slice.apply(arguments, [0])[0];
+//		console.log('setvlaie');
+//		console.log(this.store.data.items);
+//	},
 	initComponent:function(){
 		this.callParent(arguments);
 		this.tpl=Ext.create('Ext.XTemplate',
@@ -301,22 +342,35 @@ function createInput(field){
         	});
 		}
 	})();
+	if(field.renderer){
+		eval('var tempFun='+field.renderer);
+		blur=Ext.Function.createSequence(blur,tempFun);
+	}
 	if(field.dataSql){
 		return Ext.create('Syu.Combox',{
 			store:Ext.create('Ext.data.Store',{
 				fields:['value','text'],
 				proxy: {
 			        type: 'ajax',
-			        url:'./../conf/dataSql.op',
+			        url:'./../conf/dataSql',
 			        extraParams:{sql:field.dataSql},
 			        reader: {
 			            type: 'json',
 			            root: 'result'
 			        },
 			        scope:this
+			    },
+			    autoLoad:true,
+			    listeners:{
+			    	beforeLoad:function(){
+			    		
+			    	}
 			    }
 
 			}),
+			listeners:{
+				blur:blur
+			},
 		    fieldLabel: field.fieldText,
 		    //id:field.entityName+'_'+field.fieldName,
 		    name:field.fieldName,
@@ -351,7 +405,7 @@ function createInput(field){
 		return Ext.create('Ext.form.Number',{
 			fieldLabel: field.fieldText,
 			//id:field.entityName+'_'+field.fieldName,
-		    name:inputInfo.name,
+		    name:field.fieldName,
 		    hidden:hidden,
 		    allowBlank:allowBlank,
 		    //allowBlank:inputInfo.allowblank,
@@ -384,12 +438,38 @@ function createInput(field){
 	}
 }
 
+function createFormItems(entity){
+	var items=[{columnWidth:.33,type:'form',padding:'10 0 0 5',items:[]},
+			   {columnWidth:.33,type:'form',padding:'10 0 0 5',items:[]},
+			   {columnWidth:.33,type:'form',padding:'10 0 0 5',items:[]}];
+	var array=entity.fields;
+	for(var i=0;i<array.length;i++){
+		if(array[i].hidden=='1'){
+			items.push(createInput(array.splice(i,1)));
+		}
+	}
+	for(var i=0;i<array.length;i++){
+		var field=array[i];
+		
+		switch(i%3){
+	   		case 0:
+	   			items[0].items.push(createInput(field));
+	   			break;
+	   		case 1:
+	   			items[1].items.push(createInput(field));
+	   			break;
+	   		case 2:
+	   			items[2].items.push(createInput(field));
+	   			break;
+		}		
+	}
+	items.push({xtype:'hiddenfield',name:'id',value:null});
+	return items;
+}
+
 function createGrid(entity){
 	var fields=[],
 		columns=[],
-		items=[{columnWidth:.33,type:'form',padding:'10 0 0 5',items:[]},
-   			   {columnWidth:.33,type:'form',padding:'10 0 0 5',items:[]},
-   			   {columnWidth:.33,type:'form',padding:'10 0 0 5',items:[]}],
 		queryUrl=entity.queryUrl,
 		createUrl=entity.createUrl,
 		updateUrl=entity.queryUrl,
@@ -433,17 +513,6 @@ function createGrid(entity){
 		
 		}
 		columns.push(column);
-		switch(i%3){
-	   		case 0:
-	   			items[0].items.push(createInput(field));
-	   			break;
-	   		case 1:
-	   			items[1].items.push(createInput(field));
-	   			break;
-	   		case 2:
-	   			items[2].items.push(createInput(field));
-	   			break;
-	   }
 	}
 
 	        
@@ -464,12 +533,17 @@ function createGrid(entity){
 	store.load();
 
 	var grid=Ext.create('EntityGrid',{
-		id:'grid_'+entity.entityName
-		,store:store
+		id:'grid_'+entity.entityName,
+		store:store
 		,columns:columns
-
+		,selModel: Ext.create("Ext.selection.CheckboxModel", {
+		    injectCheckbox: 0,//checkbox位于哪一列，默认值为0
+		    mode: "single",//multi,simple,single；默认为多选multi
+		    checkOnly: false,//如果值为true，则只用点击checkbox列才能选中此条记录
+		    allowDeselect: true,//如果值true，并且mode值为单选（single）时，可以通过点击checkbox取消对其的选择
+		    enableKeyNav: true
+		})
 		});
-	grid.setFormItems(items);
 	grid.setEntity(entity);
 	return grid;
 
@@ -491,13 +565,13 @@ var treeStore = Ext.create('Ext.data.TreeStore', {
         url : './../conf/tree'
     },
     root:{
-    	text:'报表'
+    	text:'认证授权'
     }
 });
 treeStore.load();
 
 var tree=Ext.create('Ext.tree.Panel', {
-	title: '报表目录',
+	title: '系统管理',
 	region:'west',
 	store: treeStore,
 	width:200,
@@ -508,9 +582,37 @@ var tree=Ext.create('Ext.tree.Panel', {
 	containerScroll: true,
 	split: true,
 	listeners: {
-	    'select': function(node, record,item) {
+		'select': function(node, record,item) {	
+	    	if(record.isLeaf()){	 
+	    		if(Ext.getCmp('tab_'+record.raw.entityName)){
+	    			var tab=Ext.getCmp('tab_'+record.raw.entityName);
+	    			mainPanle.setActiveTab(tab);
+	    			return;
+	    		}
+	    		Ext.Ajax.request({
+	    			method:'post',
+	    			url:'./../conf/entity',
+	    			params:{entityName:record.raw.entityName},
+	    			failure:function(r,data){
 
-	    }
+	    			},
+	    			success:function(r,data){
+	    				var result = Ext.JSON.decode(r.responseText);
+	    				//console.log(result);
+	    				var grid=createGrid(result);
+	    				var panel=Ext.create('Ext.Panel',{
+	    					id:'tab_'+record.raw.entityName,
+	    					title:result.title,
+	    					closable:true,
+	    					layout:'fit',
+	    					items:[grid]
+	    				});
+	    				mainPanle.add(panel);
+	    				mainPanle.setActiveTab(panel);
+	    			}
+	    		});
+	    	}
+	    } 
 	}
 
 });
@@ -523,26 +625,27 @@ Ext.onReady(function(){
 //	Ext.getDoc().on("contextmenu", function(e){
 //	    e.stopEvent();
 //	});
-	Ext.Ajax.request({
-		method:'post',
-		url:'./../conf/entity',
-		params:{entityName:'sysRole'},
-		failure:function(r,data){
-
-		},
-		success:function(r,data){
-			var result = Ext.JSON.decode(r.responseText);
-			//console.log(result);
-			var grid=createGrid(result);
-			var panel=Ext.create('Ext.Panel',{
-				title:result.title,
-				layout:'fit',
-				items:[grid]
-			});
-			mainPanle.add(panel);
-			mainPanle.setActiveTab(panel);
-		}
-	});
+//	Ext.Ajax.request({
+//		method:'post',
+//		url:'./../conf/entity',
+//		params:{entityName:'sysRole'},
+//		failure:function(r,data){
+//
+//		},
+//		success:function(r,data){
+//			var result = Ext.JSON.decode(r.responseText);
+//			//console.log(result);
+//			var grid=createGrid(result);
+//			var panel=Ext.create('Ext.Panel',{
+//				title:result.title,
+//				closable:true,
+//				layout:'fit',
+//				items:[grid]
+//			});
+//			mainPanle.add(panel);
+//			mainPanle.setActiveTab(panel);
+//		}
+//	});
 	var view=new Ext.Viewport({
 	   	layout:'border',
 	    items: [tree,mainPanle]

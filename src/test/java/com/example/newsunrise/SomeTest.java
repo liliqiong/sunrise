@@ -1,5 +1,6 @@
 package com.example.newsunrise;
 
+import java.util.UUID;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -12,8 +13,10 @@ public class SomeTest {
 	@Test
 	public void test(){
 		//gittest
-		boolean a=ipIn("192.168.1.0","192.168.1.0","192.168.1.0");
-		System.out.println(a);
+		for(int a=0;a<100;a++){
+			UUID s=UUID.randomUUID();
+			System.out.println(s);
+		}
 	}
 	
 	@Test

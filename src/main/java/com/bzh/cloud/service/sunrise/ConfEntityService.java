@@ -21,6 +21,7 @@ public class ConfEntityService {
 	
 	public ConfEntity queryEntity(String entityName){
 		ConfEntity e=confEntityDao.selectById(entityName);
+		System.out.println(entityName);
 		List<ConfFields> fs=confFieldsDao.findByentityName(entityName);
 		e.setFields(fs);
 		return e;
