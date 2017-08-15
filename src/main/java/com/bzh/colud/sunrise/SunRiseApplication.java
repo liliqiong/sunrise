@@ -13,9 +13,8 @@ import org.springframework.context.annotation.ComponentScan;
 @MapperScan(basePackages = "com.bzh.cloud.dao.sunrise")
 public class SunRiseApplication {
 		
-	public static void main(String[] args) {
+	public static void main(String[] args) {		
 		
-		SpringApplication.run(SunRiseApplication.class, args);
-		 
+		SpringApplication.run(SunRiseApplication.class, args);		 
 	}
 }

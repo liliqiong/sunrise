@@ -1,6 +1,7 @@
 package com.bzh.cloud.service.sunrise;
 
 import java.util.Date;
+import java.util.Set;
 import java.util.UUID;
 import java.util.concurrent.TimeUnit;
 
@@ -37,6 +38,7 @@ public class SysStaffService {
     ValueOperations<String, SysStaff> staffOps;
     @Resource(name = "redisTemplate")
     ValueOperations<String, SysCurrentToken> tokenOps;
+
 	
 
 	
@@ -83,11 +85,14 @@ public class SysStaffService {
 	public SysCurrentToken createToken(String staffId,String requestIp){
 		//先清除对应staffId下之前使用过的token
 		sysCurrentTokenDao.deleteByStaffId(staffId);
+		Set<String> keys=tokenOps.getOperations().keys("*"+requestIp);
+		tokenOps.getOperations().delete(keys);
 		//新建一个token默认有效时间30分钟
 		SysCurrentToken sct=new SysCurrentToken();
 		sct.setStaffId(staffId);
 		sct.setToken(UUID.randomUUID().toString());
-		sct.setExpirationTime(new Date(System.currentTimeMillis()+configPropertiesService.getTokenExpirationTime()*60*1000));
+		sct.setExpirationTime(
+				new Date(System.currentTimeMillis()+configPropertiesService.getTokenExpirationTime()*60*1000));
 		sct.setRequestIp(requestIp);
 		sysCurrentTokenDao.insert(sct);
 		return sct;
@@ -104,15 +109,17 @@ public class SysStaffService {
 		//从redis获取
 		SysCurrentToken sct =tokenOps.get(token+"_"+ip);
 		if(sct!=null){
+			tokenOps.getOperations().expireAt(token+"_"+ip, 
+					new Date(System.currentTimeMillis()+configPropertiesService.getTokenExpirationTime()*60*1000));
 			return sct;
 		}
 		sct= sysCurrentTokenDao.findByToken(token, ip);
 		if(sct==null){
 			return null;
 		}
-		sct.setExpirationTime(new Date(System.currentTimeMillis()+configPropertiesService.getTokenExpirationTime()*60*1000));
+		sct.setExpirationTime(
+				new Date(System.currentTimeMillis()+configPropertiesService.getTokenExpirationTime()*60*1000));
 		//跟新token有效时间
-		System.out.println(sct);
 		sysCurrentTokenDao.updateOne(sct);
 		tokenOps.set(token+"_"+ip, sct, configPropertiesService.getTokenExpirationTime(), TimeUnit.MINUTES);
 		return sct;

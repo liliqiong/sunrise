@@ -1,9 +1,14 @@
 package com.bzh.cloud.util.sunrise;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+import net.sf.ezmorph.object.DateMorpher;
+import net.sf.json.JSONObject;
+import net.sf.json.util.JSONUtils;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonArray;
@@ -11,6 +16,7 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import com.google.gson.reflect.TypeToken;
+import com.bzh.cloud.util.sunrise.DateMorpherEx;
 
 /**
  * 
@@ -64,7 +70,12 @@ public class JSONUtil {
 	    return list;
 	}
 	
-	public static void main(String[] args) {
-	}
+	  public static <T> T JsonToBean(Class<T> clazz, String JsonString) {
+	        JSONUtils.getMorpherRegistry().registerMorpher(
+	                new DateMorpherEx(new String[]{"yyyy-MM-dd HH:mm:ss","yyyy-MM-dd"}, (Date)null));//调用DateMorpherEx，defaultValue为null
+	        JSONObject jsonObject = JSONObject.fromObject(JsonString);
+	        T entity = (T) JSONObject.toBean(jsonObject, clazz);
+	        return entity;
+	    }
 	
 }

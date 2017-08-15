@@ -147,6 +147,17 @@ public class ConfFields extends Model<ConfFields> {
 	public void setInitValid(String initValid) {
 		this.initValid = initValid;
 	}
+
+
+	@Override
+	public String toString() {
+		return "ConfFields [entityName=" + entityName + ", columnIndex="
+				+ columnIndex + ", fieldName=" + fieldName + ", fieldType="
+				+ fieldType + ", fieldText=" + fieldText + ", initValid="
+				+ initValid + ", hidden=" + hidden + ", renderer=" + renderer
+				+ ", width=" + width + ", dataSql=" + dataSql + ", allowBlank="
+				+ allowBlank + ", checkSql=" + checkSql + "]";
+	}
 	
 	
 	

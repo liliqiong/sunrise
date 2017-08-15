@@ -3,6 +3,8 @@ package com.bzh.cloud.entity.sunrise;
 import java.io.Serializable;
 import java.util.Date;
 
+import org.springframework.format.annotation.DateTimeFormat;
+
 import com.baomidou.mybatisplus.activerecord.Model;
 import com.baomidou.mybatisplus.annotations.TableId;
 
@@ -31,13 +33,15 @@ public class SysStafftempfuncright extends Model<SysStafftempfuncright> {
 	private String rightCode;
 	
 
-
+	//@DateTimeFormat(pattern = "yyyy-MM-dd")
 	private Date accreditTime;
 	private String accreditStaffId;
 	private String useTag;
 	private Integer times;
 	private Integer usedTimes;
+	//@DateTimeFormat(pattern = "yyyy-MM-dd")
 	private Date startDate;
+	//@DateTimeFormat(pattern = "yyyy-MM-dd")
 	private Date endDate;
 	private String remark;
 	private Date updateTime;
@@ -165,5 +169,17 @@ public class SysStafftempfuncright extends Model<SysStafftempfuncright> {
 		// TODO Auto-generated method stub
 		return id;
 	}
+	@Override
+	public String toString() {
+		return "SysStafftempfuncright [id=" + id + ", staffId=" + staffId
+				+ ", rightCode=" + rightCode + ", accreditTime=" + accreditTime
+				+ ", accreditStaffId=" + accreditStaffId + ", useTag=" + useTag
+				+ ", times=" + times + ", usedTimes=" + usedTimes
+				+ ", startDate=" + startDate + ", endDate=" + endDate
+				+ ", remark=" + remark + ", updateTime=" + updateTime
+				+ ", updateStaffId=" + updateStaffId + ", updateDepartId="
+				+ updateDepartId + "]";
+	}
 
+	
 }

@@ -1,66 +1,39 @@
 package com.bzh.cloud.controller.sunrise;
 
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
-
-import java.util.UUID;
+import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-
+import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 import net.sf.json.JSONObject;
-
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.data.redis.core.StringRedisTemplate;
+import org.springframework.data.redis.core.ValueOperations;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 import com.baomidou.mybatisplus.mapper.BaseMapper;
-import com.baomidou.mybatisplus.mapper.Wrapper;
 import com.bzh.cloud.dao.sunrise.ConfEntityDao;
 import com.bzh.cloud.entity.sunrise.ConfEntity;
+import com.bzh.cloud.entity.sunrise.SysDataright;
+import com.bzh.cloud.entity.sunrise.SysSystemguimenu;
 import com.bzh.cloud.service.sunrise.ConfEntityService;
+import com.bzh.cloud.service.sunrise.ValidEntityService;
 import com.bzh.cloud.util.sunrise.AaAListMap;
 import com.bzh.cloud.util.sunrise.AaAmap;
+import com.bzh.cloud.util.sunrise.HttpUtil;
+import com.bzh.cloud.util.sunrise.JSONUtil;
 import com.bzh.cloud.util.sunrise.SpringUtil;
 import com.bzh.cloud.util.sunrise.SqlUtil;
-
-
-
 
 
 @Controller
@@ -76,13 +49,26 @@ public class ConfigController {
 	
 	@Autowired
 	JdbcTemplate jdbcTemplate;
+	
+	@Autowired
+	ValidEntityService validEntityService;
+	@Autowired
+	RedisTemplate<String, ?> redisTemplate;
+    @Resource(name = "redisTemplate")
+    ValueOperations<String, List<SysSystemguimenu>> menuOps;
+    @Resource(name = "redisTemplate")
+    ValueOperations<String, List<SysDataright>> dataOps;
+    @Resource(name = "redisTemplate")
+    ValueOperations<String,String> strOps;
+    @Autowired
+    StringRedisTemplate stringRedisTemplate;
 
 	@RequestMapping(value="/main")
 	public String mian(Model model){
 		return "test";
 	}
 	
-	@SuppressWarnings("serial")
+
 	@RequestMapping(value="/tree")
 	@ResponseBody
 	public Map<String, Object> tree(Integer parentId){
@@ -148,11 +134,8 @@ public class ConfigController {
 		int start=Integer.valueOf( queryParam.get("start"));
 		int limit=Integer.valueOf( queryParam.get("limit"));
 		String sql=confEntityDao.selectById(entityName).getQuerySql();
-		System.out.println(sql);
-		sql=SqlUtil.formartSql(sql, queryParam);
-		
+		sql=SqlUtil.formartSql(sql, queryParam);	
 		String countSql=SqlUtil.countSql(sql);
-		System.out.println(countSql);
 		sql=sql+" limit "+start+","+limit;
 		int total=jdbcTemplate.queryForObject(countSql, Integer.class);
 		System.out.println("data:"+sql);
@@ -167,41 +150,80 @@ public class ConfigController {
 		return result;
 		
 	}
-	
+	@SuppressWarnings({ "rawtypes", "unchecked" })
 	@RequestMapping(value="/create")
 	@ResponseBody
-	public Map<String, String> createEntity(String jsonStr){	
-		Map<String, String> map=new HashMap<String, String>();
+	public Map<String, Object> createEntity(String jsonStr,HttpServletRequest request){	
+		System.out.println(jsonStr);
+		String ip=null;
+		try {
+			ip=HttpUtil.getIpAddress(request);
+		} catch (IOException e) {
+			
+			e.printStackTrace();
+		}
+		String token=request.getHeader("Authorization");
 		JSONObject jsonO = JSONObject.fromObject(jsonStr);
+		Map<String, Object> map=validEntityService.vaild(jsonO,token,ip,true);
+		if(!(boolean) map.get("success")){
+			return map;
+		}
 		String entityName=jsonO.getString("entityName");
 		//jsonO.put("id", UUID.randomUUID().toString());
-		System.out.println(jsonO);
 		BaseMapper bm=(BaseMapper) SpringUtil.getBean(entityName+"Dao");
-		Object sr = JSONObject.toBean(jsonO,getClass(upFist(entityName)));
-		bm.insert(sr);
+		//Object sr = JSONObject.toBean(jsonO,getClass(upFist(entityName)));
+		Object sr =  JSONUtil.JsonToBean(getClass(upFist(entityName)), jsonStr);
 		System.out.println(sr);
-		map.put("success", "true");
+		try {
+			bm.insert(sr);
+		} catch (Exception e) {
+			map.put("success", false);
+			map.put("err", e.getMessage());
+			e.printStackTrace();
+			return map;
+		}
+		deleteRedisCache();
 		return map;
 	}
-	
+	@SuppressWarnings({ "rawtypes", "unchecked" })
 	@RequestMapping(value="/update")
 	@ResponseBody
-	public Map<String, String> updateEntity(String jsonStr){	
-		System.out.println(jsonStr);
-		Map<String, String> map=new HashMap<String, String>();
+	public Map<String, Object> updateEntity(String jsonStr,HttpServletRequest request){	
+		String ip=null;
+		try {
+			ip=HttpUtil.getIpAddress(request);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		String token=request.getHeader("Authorization");
 		JSONObject jsonO = JSONObject.fromObject(jsonStr);
+		Map<String, Object> map=validEntityService.vaild(jsonO,token,ip,false);
+		if(!(boolean) map.get("success")){
+			return map;
+		}
 		String entityName=jsonO.getString("entityName");
+		
 		BaseMapper bm=(BaseMapper) SpringUtil.getBean(entityName+"Dao");
-		Object sr = JSONObject.toBean(jsonO,getClass(upFist(entityName)));
-		bm.updateById(sr);
+		Object sr =  JSONUtil.JsonToBean(getClass(upFist(entityName)), jsonStr);
 		System.out.println(sr);
-		map.put("success", "true");
+		try {
+			bm.updateById(sr);
+		} catch (Exception e) {
+			map.put("success", false);
+			map.put("err", e.getMessage());
+			e.printStackTrace();
+			return map;
+		}
+		
+		deleteRedisCache();
+		
 		return map;
 	}
 	
+	@SuppressWarnings("rawtypes")
 	@RequestMapping(value="/delete")
 	@ResponseBody
-	public Map<String, String> delete(String jsonStr){	
+	public Map<String, String> delete(String jsonStr,HttpServletRequest request){	
 		System.out.println(jsonStr);
 		Map<String, String> map=new HashMap<String, String>();
 		JSONObject jsonO = JSONObject.fromObject(jsonStr);
@@ -210,6 +232,7 @@ public class ConfigController {
 		String id=jsonO.getString("id");
 		bm.deleteById(id);
 		map.put("success", "true");
+		deleteRedisCache();
 		return map;
 	}
 	
@@ -240,14 +263,12 @@ public class ConfigController {
 		try {
 			clzz=Class.forName("com.bzh.cloud.entity.sunrise."+entityName);
 		} catch (ClassNotFoundException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		Object o=null;
 		try {
 			o=clzz.newInstance();
 		} catch (InstantiationException | IllegalAccessException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		return o;
@@ -259,10 +280,8 @@ public class ConfigController {
 		try {
 			clzz=Class.forName("com.bzh.cloud.entity.sunrise."+entityName);
 		} catch (ClassNotFoundException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
-		}
-		
+		}		
 		return clzz;
 	}
 	
@@ -342,5 +361,12 @@ public class ConfigController {
             }
         }
         return sql;
+	}
+	
+	private void deleteRedisCache(){
+		Set<String> menuK=menuOps.getOperations().keys("menu_*");
+		Set<String> dataK=dataOps.getOperations().keys("data_*");
+		menuOps.getOperations().delete(menuK);
+		menuOps.getOperations().delete(dataK);
 	}
 }

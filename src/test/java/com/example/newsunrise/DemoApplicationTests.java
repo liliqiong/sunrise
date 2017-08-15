@@ -8,6 +8,8 @@ import java.util.regex.Pattern;
 
 import javax.annotation.Resource;
 
+import net.sf.json.JSONObject;
+
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,6 +27,7 @@ import com.bzh.cloud.entity.sunrise.SysSystemguimenu;
 import com.bzh.cloud.service.sunrise.MenuAuthorService;
 import com.bzh.cloud.service.sunrise.SysCurrentTokenService;
 import com.bzh.cloud.service.sunrise.SysStaffService;
+import com.bzh.cloud.service.sunrise.ValidEntityService;
 import com.bzh.cloud.util.sunrise.Underline2Camel;
 import com.bzh.colud.sunrise.SunRiseApplication;
 
@@ -47,6 +50,9 @@ public class DemoApplicationTests {
 	
 	@Autowired
 	MenuAuthorService menuService;
+	
+	@Autowired
+	ValidEntityService validEntityService;
 	
 //    @Autowired
 //    private RedisTemplate<String,SysStaff> redisTemplate;
@@ -97,7 +103,7 @@ public class DemoApplicationTests {
 		}
 	}              
 	
-	@Test
+	//@Test
 	public void fields(){
 		List<Map<String,Object>> list=
 				jdbcTemplate.queryForList("select * from conf_fields"
@@ -133,6 +139,46 @@ public class DemoApplicationTests {
 		}
 	}
 	
+	
+	@Test
+	public void sqlMapth(){
+		String sql="select subsys_name text,subsys_code value from sys_subsys where 1=1";
+		Matcher m=Pattern.compile("select\\s+((\\w+)\\s+text\\s*,\\s*(\\w+)\\s+value)\\s+from\\s+\\w+").matcher(sql);
+		m.find();
+		System.out.println(m.group(1));
+		System.out.println(m.group(2));
+		System.out.println(m.group(3));
+		sql=sql.replace(m.group(1), "count(1)");
+		if(sql.contains("where")){
+			sql+=" and "+m.group(3)+"="+"value";
+		}else{
+			sql+=" where "+m.group(3)+"="+"value";
+		}
+		//m.group(1);
+		System.out.println(sql);
+		
+	}
+	
+	@Test
+	public void test2(){
+		String josnStr="{\"staffId\":\"syu1\","
+				+ "\"rightAttr\":\"0\","
+				+ "\"rightTag\":\"0\","
+				+ "\"accreditStaffid\":\"\","
+				+ "\"dataCode\":\"data_33\","
+				+ "\"rightClass\":\"0\","
+				+ "\"remark\":\"\","
+				+ "\"dataType\":\"1\","
+				+ "\"operSpecial\":\"0\","
+				+ "\"accreditTime\":\"2017-08-07 15:52:25\","
+				+ "\"id\":\"2cafd203-db53-4ce2-8a20-73e3c89cd39b\","
+				+ "\"entityName\":\"sysStaffdataright\"}";
+		JSONObject jsonO = JSONObject.fromObject(josnStr);
+		Map<String, Object> map=validEntityService.vaild(jsonO, "e2aef837-1c33-45cb-8922-e1dbe8deae30","192.168.1.196",true);
+		map.forEach((K,V)->{
+			System.out.println(K+" "+V);
+		});
+	}
 
 
 }
