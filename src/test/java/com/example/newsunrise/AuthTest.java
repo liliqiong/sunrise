@@ -7,6 +7,7 @@ import java.util.List;
 import org.apache.http.NameValuePair;
 import org.apache.http.client.entity.UrlEncodedFormEntity;
 import org.apache.http.client.methods.CloseableHttpResponse;
+import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.CloseableHttpClient;
@@ -28,6 +29,7 @@ public class AuthTest {
         CloseableHttpClient client = HttpClients.createDefault();
         //创建一个post对象
         HttpPost post = new HttpPost("http://localhost:8080/api/auth/test");
+        HttpGet get=new HttpGet("http://localhost:8080/api/auth/test");
         //创建一个Entity，模拟表单数据
         List<NameValuePair> formList = new ArrayList<>();
         //添加表单数据

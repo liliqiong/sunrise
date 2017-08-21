@@ -6,8 +6,6 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.ComponentScan;
 
 
-
-
 @SpringBootApplication
 @ComponentScan(basePackages={"com.bzh.cloud"})
 @MapperScan(basePackages = "com.bzh.cloud.dao.sunrise")
