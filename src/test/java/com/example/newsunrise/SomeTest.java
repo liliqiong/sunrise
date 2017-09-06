@@ -1,9 +1,12 @@
 package com.example.newsunrise;
 
+import java.util.Arrays;
 import java.util.Base64;
 import java.util.Base64.Decoder;
 import java.util.Base64.Encoder;
+import java.util.HashMap;
 import java.util.Iterator;
+import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
 import java.util.regex.Matcher;
@@ -110,5 +113,15 @@ public class SomeTest {
 		byte[] b=new byte[]{-84, -19, 0, 5, 116, 0, 41, 109, 101, 110, 117, 95, 51, 51, 49, 52, 57, 56, 51, 98, 45, 54, 53, 99, 101, 45, 52, 97, 101, 100, 45, 57, 55, 54, 49, 45, 97, 57, 98, 53, 57, 98, 101, 57, 98, 56, 49, 97};
 		String s=new String(b);
 		System.out.println(s);
+	}
+	
+	
+	@Test
+	public void t8(){
+		Arrays.stream(new int[] {1, 2, 3})
+		.map(n -> {System.out.println(n);return n;} )
+	    .map(n -> 2 * n + 1)
+	    .average()
+	    .ifPresent(System.out::println); 
 	}
 }

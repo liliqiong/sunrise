@@ -75,8 +75,6 @@ spring:
     pool.min-idle: 0
 # 连接超时时间（毫秒）
     timeout: 0
-  jackson:
-    date-format: yyyy-MM-dd HH:mm:ssXXX
 mybatis:
 #  config-location: classpath:config/mybatis-spring.xml
   mapper-locations: classpath:mapper/res/*.xml
@@ -85,7 +83,7 @@ mybatis:
 # 日志配置
 logging:
   config: classpath:config/logback-spring.xml
-  path: /var/log/applications/sunrise
+  path: /var/log/applications/unrise
   level:
     com.bzkj.sunsrise.dao: DEBUG
 
@@ -94,6 +92,3 @@ selfProperties:
 management:
   security:
     enabled: false
-
-server:
-  port: 8080

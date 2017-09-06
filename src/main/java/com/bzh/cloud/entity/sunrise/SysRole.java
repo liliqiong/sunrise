@@ -43,17 +43,20 @@ public class SysRole extends Model<SysRole>{
 
 
 	/** default constructor */
-	public SysRole() {
+	public SysRole(String id) {
+		System.out.println("inital SysRole");
 	}
 
 
 
 	// Property accessors
 	public String getRoleCode() {
+		System.out.println("getRoleCode");
 		return this.roleCode;
 	}
 
 	public void setRoleCode(String roleCode) {
+		System.out.println("setRoleCode");
 		this.roleCode = roleCode;
 	}
 
@@ -115,7 +118,6 @@ public class SysRole extends Model<SysRole>{
 
 	@Override
 	protected Serializable pkVal() {
-		// TODO Auto-generated method stub
 		return this.getId();
 	}
 	

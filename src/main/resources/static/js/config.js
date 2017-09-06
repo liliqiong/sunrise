@@ -322,10 +322,7 @@ Ext.define('Syu.Combox',{
       			}
       		});
 		}
-
-	}
-    ,listeners:{
-    	beforequery:function(e){
+		this.on('beforequery',function(e){
     		console.log('beforequery');
     		var combo = e.combo;
               if(!e.forceAll){
@@ -339,9 +336,11 @@ Ext.define('Syu.Combox',{
                   });
                   combo.expand();
                   return false;
-              }
-    	}
-    }
+              }			
+		});
+
+	}
+
 });
 
 function createInput(field){
@@ -405,6 +404,7 @@ function createInput(field){
 			listeners:{
 				blur:blur,
 				select:select
+			    
 			},
 		    fieldLabel: field.fieldText,
 		    //id:field.entityName+'_'+field.fieldName,

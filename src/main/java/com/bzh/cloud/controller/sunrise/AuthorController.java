@@ -32,6 +32,7 @@ import com.bzh.cloud.service.sunrise.SysStaffService;
 import com.bzh.cloud.util.sunrise.HttpUtil;
 
 @RestController
+//@RequestMapping(value = "/api")
 public class AuthorController {
 	public static Logger log=Logger.getLogger(AuthorController.class);
 	

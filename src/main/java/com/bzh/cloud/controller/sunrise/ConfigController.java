@@ -6,12 +6,17 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.Set;
+import java.util.function.Function;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
+
 import net.sf.json.JSONObject;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.core.StringRedisTemplate;
@@ -20,7 +25,9 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
+
 import com.baomidou.mybatisplus.mapper.BaseMapper;
 import com.bzh.cloud.dao.sunrise.ConfEntityDao;
 import com.bzh.cloud.entity.sunrise.ConfEntity;
@@ -130,6 +137,9 @@ public class ConfigController {
 	public Map<String, Object> getData(HttpServletRequest request){
 		Map<String, String[]> _param=request.getParameterMap();
 		Map<String, String> queryParam=conparam(_param);
+		queryParam.forEach((K,V)->{
+			System.out.println(K+" "+V);
+		});
 		String entityName=queryParam.get("entityName");
 		int start=Integer.valueOf( queryParam.get("start"));
 		int limit=Integer.valueOf( queryParam.get("limit"));
@@ -233,6 +243,16 @@ public class ConfigController {
 		bm.deleteById(id);
 		map.put("success", "true");
 		deleteRedisCache();
+		return map;
+	}
+	
+	
+	@RequestMapping(value="/test")
+	@ResponseBody
+	public Map<String, Object> test(){
+		Map<String, Object> map=new HashMap<String, Object>();
+		map.put("a", 1);
+		map.put("b", 2);
 		return map;
 	}
 	
