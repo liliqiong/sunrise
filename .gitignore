@@ -2,6 +2,7 @@
 /.settings/
 /.idea
 /.mvn/
+/.myeclipse/
 
 
 .DS_Store
