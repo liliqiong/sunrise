@@ -10,5 +10,7 @@
 .classpath
 .tern-project
 .iml
+.iml
 mvnw
 mvnw.cmd
+.pom
