@@ -570,6 +570,7 @@ function createGrid(entity){
 	     
 	var store=Ext.create('Ext.data.Store',{
 		fields:fields,
+		//pageSize:5,
 		proxy : {
             type : 'ajax',
             url : './../conf/data',
